@@ -1,21 +1,30 @@
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import React, { Component } from 'react';
+import { Provider } from 'react-redux';
+import store from './src/Store';
+import { StyleSheet, Text, View, YellowBox } from 'react-native';
+import Home from './src/Home';
 
-export default class App extends React.Component {
-  render() {
-    return (
-      <View style={styles.container}>
-        <Text>Open up App.js to start working on your app!</Text>
-      </View>
-    );
-  }
+console.disableYellowBox = ['Setting a timer'];
+console.disableYellowBox = ['Remote debugger'];
+
+YellowBox.ignoreWarnings(['Setting a timer']);
+YellowBox.ignoreWarnings(['Remote debugger']);
+
+export default class App extends Component {
+    render() {
+        return (
+            <View style={styles.container}>
+                <Provider store={store}>
+                    <Home />
+                </Provider>
+            </View>
+        );
+    }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+    container: {
+        flex: 1,
+        backgroundColor: '#fff'
+    }
 });
