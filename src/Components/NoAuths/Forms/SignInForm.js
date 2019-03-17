@@ -1,18 +1,19 @@
-import React from 'react';
-import { View, Text, StyleSheet, TextInput, Button } from 'react-native';
+import React, { Fragment } from 'react';
+import { Button, Item, Input, Text } from 'native-base';
+import { StyleSheet } from 'react-native';
 import { Field, reduxForm } from 'redux-form';
 
 const fieldName = props => {
     return (
-        <View>
-            <TextInput
+        <Item>
+            <Input
                 style={styles.textInput}
                 placeholder={props.placeholder}
-                onChangeText={props.input.onChange}
                 value={props.input.value}
                 keyboardType={
                     props.input.name === 'email' ? 'email-address' : 'default'
                 }
+                onChangeText={props.input.onChange}
                 autoCapitalize="none"
                 onBlur={props.input.onBlur}
                 secureTextEntry={
@@ -23,8 +24,7 @@ const fieldName = props => {
             {props.meta.touched && props.meta.error && (
                 <Text style={styles.error}>{props.meta.error}</Text>
             )}
-            <View style={styles.line} />
-        </View>
+        </Item>
     );
 };
 
@@ -51,27 +51,26 @@ const validate = values => {
 
 const SignInForm = props => {
     return (
-        <View>
+        <Fragment>
             <Field name="email" component={fieldName} placeholder="correo" />
             <Field
                 name="password"
                 component={fieldName}
                 placeholder="contraseña"
             />
-            <View style={{ paddingVertical: 5 }}>
-                <Button
-                    title="Ingresar"
-                    onPress={props.handleSubmit(props.userSignInHandler)}
-                />
-            </View>
-        </View>
+            <Button
+                style={{ marginVertical: 10 }}
+                full
+                onPress={props.handleSubmit(props.userSignInHandler)}
+            >
+                <Text>Ingresar</Text>
+            </Button>
+        </Fragment>
     );
 };
 
 const styles = StyleSheet.create({
     textInput: {
-        marginBottom: 5,
-        height: 16,
         color: '#fff'
     },
     line: {

@@ -1,26 +1,46 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { View, Text, StyleSheet } from 'react-native';
+import { StyleSheet, AsyncStorage } from 'react-native';
+import { user } from '../ActionCreators';
 import AuthsStack from './Auths/AuthsStack';
 import NoAuthsStack from './NoAuths/NoAuthsStack';
-import SignIn from './NoAuths/SignIn';
 
 class VerifyIfSession extends Component {
-    componentWillReceiveProps = nextProps => {};
+    _retrieveData = async () => {
+        try {
+            const value = await AsyncStorage.getItem('userLogged@polls');
+            if (value !== null) {
+                return value;
+            }
+            return null;
+        } catch (error) {
+            console.log('No hay usuario guardado');
+        }
+    };
 
-    componentDidMount = async () => {};
+    componentDidMount = async () => {
+        let response = await this._retrieveData();
+        response = JSON.parse(response);
+        if (response) {
+            this.props.loadUser(response);
+        }
+    };
 
     render = () => {
         return (
-            <View style={styles.container}>
-                {false ? <SignIn /> : <NoAuthsStack />}
-            </View>
+            <Fragment>
+                {this.props.logged ? <AuthsStack /> : <NoAuthsStack />}
+            </Fragment>
         );
     };
 }
 
 const mapStateToProps = state => ({
-    user: state.userStateReducer
+    logged: state.userReducer
+});
+
+const mapDispatchToProps = dispatch => ({
+    loadUser: dataUser => dispatch(user.loadUser(dataUser))
 });
 
 const styles = StyleSheet.create({
@@ -31,4 +51,7 @@ const styles = StyleSheet.create({
     }
 });
 
-export default connect(mapStateToProps)(VerifyIfSession);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(VerifyIfSession);

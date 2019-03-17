@@ -1,16 +1,10 @@
 import React, { Component } from 'react';
 import { createStackNavigator, createAppContainer } from 'react-navigation';
-import SignIn from '../NoAuths/SignIn';
-import SignUp from '../NoAuths/SignUp';
+import DrawerStack from './DrawerStack';
 
 const AuthsStack = createStackNavigator(
     {
-        SignIn: {
-            screen: SignIn
-        },
-        SignUp: {
-            screen: SignUp
-        }
+        Drawer: DrawerStack
     },
     {
         headerMode: 'none'
