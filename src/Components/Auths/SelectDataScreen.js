@@ -10,11 +10,16 @@ import {
     Content,
     Button,
     Icon,
-    Item,
+    Label,
+    Input,
+    Footer,
     Right,
     Text,
     Title,
-    Left
+    Left,
+    Form,
+    Item,
+    Picker
 } from 'native-base';
 
 const mapStateToProps = state => ({
@@ -28,10 +33,18 @@ class SelectDataScreen extends Component {
             fontLoaded: false,
             provincia: 'Manabí',
             canton: 'Tosagua',
-            parroquia: null,
-            distrito: null
+            parroquia: 'Tosagua',
+            distrito: 'Distrito 1'
         };
+        this.onValueChange = this.onValueChange.bind(this);
     }
+
+    onValueChange = name => value => {
+        console.log(value);
+        this.setState({
+            [name]: value
+        });
+    };
 
     static navigationOptions = {
         drawerLabel: 'Home',
@@ -50,10 +63,10 @@ class SelectDataScreen extends Component {
     componentDidMount = () => {};
 
     render = () => {
-        console.log(this.props.logged);
-        return (
-            <Container>
-                {this.state.fontLoaded ? (
+        console.log(this.state);
+        if (this.state.fontLoaded) {
+            return (
+                <Container>
                     <Header>
                         <Left>
                             <Button
@@ -72,9 +85,85 @@ class SelectDataScreen extends Component {
                             <Text>{this.props.logged.username[0]}</Text>
                         </Right>
                     </Header>
-                ) : null}
-            </Container>
-        );
+                    <Content>
+                        <Form>
+                            <Item picker>
+                                <Picker
+                                    mode="dropdown"
+                                    iosIcon={<Icon name="arrow-down" />}
+                                    style={{ width: undefined }}
+                                    placeholder="Parroquia"
+                                    placeholderStyle={{ color: '#bfc6ea' }}
+                                    placeholderIconColor="#007aff"
+                                    selectedValue={this.state.parroquia}
+                                    onValueChange={this.onValueChange(
+                                        'parroquia'
+                                    )}
+                                >
+                                    <Picker.Item
+                                        label="Tosagua"
+                                        value="Tosagua"
+                                    />
+                                    <Picker.Item
+                                        label="Bachillero"
+                                        value="Bachillero"
+                                    />
+                                    <Picker.Item
+                                        label="Angel Pedro Giler, (La Estancilla)"
+                                        value="Estancilla"
+                                    />
+                                </Picker>
+                            </Item>
+                            <Item picker>
+                                <Picker
+                                    mode="dropdown"
+                                    iosIcon={<Icon name="arrow-down" />}
+                                    style={{ width: undefined }}
+                                    placeholder="Distrito"
+                                    placeholderStyle={{ color: '#bfc6ea' }}
+                                    placeholderIconColor="#007aff"
+                                    selectedValue={this.state.distrito}
+                                    onValueChange={this.onValueChange(
+                                        'distrito'
+                                    )}
+                                >
+                                    <Picker.Item
+                                        label="Distrito 1"
+                                        value="Distrito 1"
+                                    />
+                                </Picker>
+                            </Item>
+                            <Item floatingLabel>
+                                <Label>A Favor</Label>
+                                <Input />
+                            </Item>
+                            <Item floatingLabel>
+                                <Label>Blancos</Label>
+                                <Input />
+                            </Item>
+                            <Item floatingLabel>
+                                <Label>Nulos</Label>
+                                <Input />
+                            </Item>
+                        </Form>
+                    </Content>
+                    <Footer>
+                        <Body>
+                            <Button
+                                style={{ alignSelf: 'center' }}
+                                full
+                                transparent
+                                onPress={() => console.log('Registrar')}
+                            >
+                                <Text>Registrar</Text>
+                            </Button>
+                        </Body>
+                    </Footer>
+                </Container>
+            );
+        } else {
+            return null;
+        }
     };
 }
 

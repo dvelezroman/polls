@@ -1,7 +1,7 @@
 import { call, put } from 'redux-saga/effects';
 import { AsyncStorage } from 'react-native';
 import { authentication, firebaseDataBase } from '../Store/Services/Firebase';
-import { user, error } from '../ActionCreators';
+import { user, error, loading } from '../ActionCreators';
 
 const signInFirebase = data =>
     authentication
@@ -36,6 +36,7 @@ const _storeData = async dataUser => {
 
 export function* workerSignIn(values) {
     try {
+        yield put(loading.working());
         const response = yield call(signInFirebase, values.payload);
         if (!response.error) {
             yield put(error.clearError());
@@ -46,6 +47,7 @@ export function* workerSignIn(values) {
         } else {
             yield put(error.setError(response));
         }
+        yield put(loading.rest());
     } catch (err) {
         yield put(
             error.setError({

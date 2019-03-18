@@ -22,7 +22,7 @@ class VerifyIfSession extends Component {
         let response = await this._retrieveData();
         response = JSON.parse(response);
         console.log(response);
-        //this.props.loadUser(response);
+        this.props.loadUser(response);
     };
 
     render = () => {

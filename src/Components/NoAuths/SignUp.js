@@ -2,14 +2,15 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Font } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
-import { Container, Content, Text, View, Button, Item } from 'native-base';
+import { Container, Content, Text, Button, Spinner } from 'native-base';
 import { StyleSheet } from 'react-native';
 import SignUpForm from './Forms/SignUpForm';
 
 import { user } from '../../ActionCreators/index';
 
 const mapStateToProps = state => ({
-    error: state.errorReducer
+    error: state.errorReducer,
+    loading: state.loadingReducer
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -38,7 +39,7 @@ class SignUp extends Component {
         return (
             <Container>
                 <Content contentContainerStyle={styles.container}>
-                    {this.state.fontLoaded ? (
+                    {this.state.fontLoaded && !this.props.loading ? (
                         <Fragment>
                             <Text
                                 style={{
@@ -60,7 +61,9 @@ class SignUp extends Component {
                                 <Text>Regresar</Text>
                             </Button>
                         </Fragment>
-                    ) : null}
+                    ) : (
+                        <Spinner />
+                    )}
                 </Content>
             </Container>
         );

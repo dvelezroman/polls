@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Font } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
-import { Container, Content, Text, Button } from 'native-base';
+import { Container, Content, Text, Button, Spinner } from 'native-base';
 import { StyleSheet } from 'react-native';
 import SignInForm from './Forms/SignInForm';
 import { user } from '../../ActionCreators';
@@ -10,7 +10,8 @@ import { user } from '../../ActionCreators';
 const mapStateToProps = state => ({
     form: state.form,
     error: state.errorReducer,
-    logged: state.userReducer
+    logged: state.userReducer,
+    loading: state.loadingReducer
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -21,6 +22,9 @@ class SignIn extends Component {
     state = {
         fontLoaded: false
     };
+
+    isCancelled = false;
+
     userSignInHandler = values => {
         this.props.signIn(values);
     };
@@ -31,7 +35,12 @@ class SignIn extends Component {
             Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
             ...Ionicons.font
         });
-        this.setState({ fontLoaded: true });
+
+        !this.isCancelled && this.setState({ fontLoaded: true });
+    }
+
+    componentWillUnmount() {
+        this.isCancelled = true; // esto cancela el setState en caso de que exista una sesión iniciada
     }
 
     render = () => {
@@ -39,7 +48,7 @@ class SignIn extends Component {
         return (
             <Container>
                 <Content contentContainerStyle={styles.container}>
-                    {this.state.fontLoaded ? (
+                    {this.state.fontLoaded && !this.props.loading ? (
                         <Fragment>
                             <Text
                                 style={{
@@ -61,7 +70,9 @@ class SignIn extends Component {
                                 <Text>Crear Usuario</Text>
                             </Button>
                         </Fragment>
-                    ) : null}
+                    ) : (
+                        <Spinner />
+                    )}
                 </Content>
             </Container>
         );
