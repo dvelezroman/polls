@@ -1,9 +1,18 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { AppRegistry, Image, StatusBar } from 'react-native';
 import { Text, List, Left, Body, ListItem, Icon, View } from 'native-base';
+import { user } from '../../ActionCreators';
+
 const pesebrePic = require('../../../assets/pesebre.jpg');
+
 const routes = [{ to: 'Home', icon: 'home' }];
-export default class SideBar extends React.Component {
+
+const mapDispatchToProps = dispatch => ({
+    logOut: () => dispatch(user.signOut())
+});
+
+class SideBar extends React.Component {
     render() {
         return (
             <View style={{ flex: 1 }}>
@@ -42,7 +51,7 @@ export default class SideBar extends React.Component {
                     />
                 </View>
                 <View style={{ flex: 1 }}>
-                    <ListItem button onPress={() => console.log('Salir')}>
+                    <ListItem button onPress={this.props.logOut}>
                         <Left>
                             <Icon name="md-log-out" />
                         </Left>
@@ -55,3 +64,8 @@ export default class SideBar extends React.Component {
         );
     }
 }
+
+export default connect(
+    null,
+    mapDispatchToProps
+)(SideBar);

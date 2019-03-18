@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Font } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
-import { Container, Content, Text, View, Button, Item } from 'native-base';
+import { Container, Content, Text, Button } from 'native-base';
 import { StyleSheet } from 'react-native';
 import SignInForm from './Forms/SignInForm';
 import { user } from '../../ActionCreators';
@@ -25,14 +25,14 @@ class SignIn extends Component {
         this.props.signIn(values);
     };
 
-    // async componentWillMount() {
-    //     await Font.loadAsync({
-    //         Roboto: require('native-base/Fonts/Roboto.ttf'),
-    //         Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
-    //         ...Ionicons.font
-    //     });
-    //     this.setState({ fontLoaded: true });
-    // }
+    async componentWillMount() {
+        await Font.loadAsync({
+            Roboto: require('native-base/Fonts/Roboto.ttf'),
+            Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
+            ...Ionicons.font
+        });
+        this.setState({ fontLoaded: true });
+    }
 
     render = () => {
         const { navigation, error, logged } = this.props;
@@ -43,7 +43,7 @@ class SignIn extends Component {
                         <Fragment>
                             <Text
                                 style={{
-                                    color: '#EEEEECFF',
+                                    color: '#C0C0C0',
                                     alignSelf: 'center'
                                 }}
                             >

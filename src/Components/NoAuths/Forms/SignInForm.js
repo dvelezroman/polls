@@ -16,10 +16,7 @@ const fieldName = props => {
                 onChangeText={props.input.onChange}
                 autoCapitalize="none"
                 onBlur={props.input.onBlur}
-                secureTextEntry={
-                    props.input.name === 'password' ||
-                    props.input.name === 'r_password'
-                }
+                secureTextEntry={props.input.name === 'password'}
             />
             {props.meta.touched && props.meta.error && (
                 <Text style={styles.error}>{props.meta.error}</Text>
@@ -59,7 +56,7 @@ const SignInForm = props => {
                 placeholder="contraseña"
             />
             <Button
-                style={{ marginVertical: 10 }}
+                style={{ marginVertical: 20 }}
                 full
                 onPress={props.handleSubmit(props.userSignInHandler)}
             >

@@ -1,18 +1,19 @@
-import React, { Component } from 'react';
-import { View, Text, StyleSheet, TextInput, Button } from 'react-native';
+import React, { Fragment } from 'react';
+import { Button, Item, Input, Text } from 'native-base';
+import { StyleSheet } from 'react-native';
 import { Field, reduxForm } from 'redux-form';
 
 const fieldName = props => {
     return (
-        <View>
-            <TextInput
+        <Item>
+            <Input
                 style={styles.textInput}
                 placeholder={props.placeholder}
-                onChangeText={props.input.onChange}
                 value={props.input.value}
                 keyboardType={
                     props.input.name === 'email' ? 'email-address' : 'default'
                 }
+                onChangeText={props.input.onChange}
                 autoCapitalize="none"
                 onBlur={props.input.onBlur}
                 secureTextEntry={
@@ -23,8 +24,7 @@ const fieldName = props => {
             {props.meta.touched && props.meta.error && (
                 <Text style={styles.error}>{props.meta.error}</Text>
             )}
-            <View style={styles.line} />
-        </View>
+        </Item>
     );
 };
 
@@ -70,7 +70,7 @@ const validate = (values, props) => {
 
 const SignUpForm = props => {
     return (
-        <View>
+        <Fragment>
             <Field name="name" component={fieldName} placeholder="nombre" />
             <Field
                 name="email"
@@ -87,20 +87,19 @@ const SignUpForm = props => {
                 component={fieldName}
                 placeholder="confirme contraseña"
             />
-            <View style={{ paddingVertical: 5 }}>
-                <Button
-                    title="Registrar"
-                    onPress={props.handleSubmit(props.userRegisterHandler)}
-                />
-            </View>
-        </View>
+            <Button
+                style={{ marginVertical: 20 }}
+                full
+                onPress={props.handleSubmit(props.userRegisterHandler)}
+            >
+                <Text>Registrar</Text>
+            </Button>
+        </Fragment>
     );
 };
 
 const styles = StyleSheet.create({
     textInput: {
-        marginBottom: 4,
-        height: 16,
         color: '#fff'
     },
     line: {
