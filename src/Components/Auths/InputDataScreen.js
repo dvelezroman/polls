@@ -10,8 +10,6 @@ import {
     Content,
     Button,
     Icon,
-    Label,
-    Input,
     Footer,
     Right,
     Text,
@@ -22,11 +20,13 @@ import {
     Picker
 } from 'native-base';
 
+import InputDataForm from './Forms/InputDataForm';
+
 const mapStateToProps = state => ({
     logged: state.userReducer
 });
 
-class SelectDataScreen extends Component {
+class InputDataScreen extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -67,7 +67,7 @@ class SelectDataScreen extends Component {
         if (this.state.fontLoaded) {
             return (
                 <Container>
-                    <Header>
+                    <Header style={{}}>
                         <Left>
                             <Button
                                 transparent
@@ -133,18 +133,7 @@ class SelectDataScreen extends Component {
                                     />
                                 </Picker>
                             </Item>
-                            <Item floatingLabel>
-                                <Label>A Favor</Label>
-                                <Input />
-                            </Item>
-                            <Item floatingLabel>
-                                <Label>Blancos</Label>
-                                <Input />
-                            </Item>
-                            <Item floatingLabel>
-                                <Label>Nulos</Label>
-                                <Input />
-                            </Item>
+                            <InputDataForm />
                         </Form>
                     </Content>
                     <Footer>
@@ -167,4 +156,4 @@ class SelectDataScreen extends Component {
     };
 }
 
-export default connect(mapStateToProps)(SelectDataScreen);
+export default connect(mapStateToProps)(InputDataScreen);

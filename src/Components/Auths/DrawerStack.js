@@ -1,12 +1,12 @@
 import React, { Component } from 'react';
 import { createDrawerNavigator, createAppContainer } from 'react-navigation';
-import SelectDataScreen from './SelectDataScreen';
+import InputDataScreen from './InputDataScreen';
 import SideBar from './SideBar';
 
 const MyDrawerNavigator = createDrawerNavigator(
     {
         Home: {
-            screen: SelectDataScreen
+            screen: InputDataScreen
         }
     },
     {
