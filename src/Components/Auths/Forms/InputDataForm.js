@@ -1,7 +1,31 @@
 import React, { Fragment } from 'react';
-import { Item, Input, Text, Label } from 'native-base';
+import { Button, Icon, Item, Input, Text, Label, Picker } from 'native-base';
 import { StyleSheet } from 'react-native';
 import { Field, reduxForm } from 'redux-form';
+
+const pickerName = props => {
+    return (
+        <Item picker>
+            <Picker
+                mode="dropdown"
+                iosIcon={<Icon name="arrow-down" />}
+                style={{ width: undefined }}
+                placeholderStyle={{ color: '#bfc6ea' }}
+                placeholderIconColor="#007aff"
+                selectedValue={props.input.value}
+                onValueChange={props.input.onChange}
+                //onValueChange={this.onValueChange('parroquia')}
+            >
+                <Picker.Item label="Tosagua" value="Tosagua" />
+                <Picker.Item label="Bachillero" value="Bachillero" />
+                <Picker.Item
+                    label="Angel Pedro Giler, (La Estancilla)"
+                    value="Estancilla"
+                />
+            </Picker>
+        </Item>
+    );
+};
 
 const fieldName = props => {
     return (
@@ -69,11 +93,11 @@ const validate = (values, props) => {
 const InputDataForm = props => {
     return (
         <Fragment>
-            {/* <Field
+            <Field
                 name="parroquia"
                 component={pickerName}
                 placeholder="Parroquia"
-            /> */}
+            />
             <Field
                 name="favor"
                 component={fieldName}
@@ -89,6 +113,13 @@ const InputDataForm = props => {
                 component={fieldName}
                 placeholder="Votos en Blanco"
             />
+            <Button
+                style={{ marginVertical: 20 }}
+                full
+                onPress={props.handleSubmit(props.registerDataHandler)}
+            >
+                <Text>Registrar</Text>
+            </Button>
         </Fragment>
     );
 };

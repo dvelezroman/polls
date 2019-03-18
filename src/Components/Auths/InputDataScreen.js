@@ -5,6 +5,7 @@ import { Font } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
 import {
     Container,
+    Badge,
     Header,
     Body,
     Content,
@@ -46,9 +47,8 @@ class InputDataScreen extends Component {
         });
     };
 
-    static navigationOptions = {
-        drawerLabel: 'Home',
-        drawerIcon: () => <Icon name="home" />
+    registerDataHandler = values => {
+        console.log(values);
     };
 
     async componentWillMount() {
@@ -67,7 +67,7 @@ class InputDataScreen extends Component {
         if (this.state.fontLoaded) {
             return (
                 <Container>
-                    <Header style={{}}>
+                    <Header style={{ paddingTop: 20 }}>
                         <Left>
                             <Button
                                 transparent
@@ -79,75 +79,21 @@ class InputDataScreen extends Component {
                             </Button>
                         </Left>
                         <Body>
-                            <Title>Ingreso</Title>
+                            <Title>Ingreso de Votos</Title>
                         </Body>
                         <Right>
-                            <Text>{this.props.logged.username[0]}</Text>
+                            <Badge info>
+                                <Text>{this.props.logged.username[0]}</Text>
+                            </Badge>
                         </Right>
                     </Header>
                     <Content>
-                        <Form>
-                            <Item picker>
-                                <Picker
-                                    mode="dropdown"
-                                    iosIcon={<Icon name="arrow-down" />}
-                                    style={{ width: undefined }}
-                                    placeholder="Parroquia"
-                                    placeholderStyle={{ color: '#bfc6ea' }}
-                                    placeholderIconColor="#007aff"
-                                    selectedValue={this.state.parroquia}
-                                    onValueChange={this.onValueChange(
-                                        'parroquia'
-                                    )}
-                                >
-                                    <Picker.Item
-                                        label="Tosagua"
-                                        value="Tosagua"
-                                    />
-                                    <Picker.Item
-                                        label="Bachillero"
-                                        value="Bachillero"
-                                    />
-                                    <Picker.Item
-                                        label="Angel Pedro Giler, (La Estancilla)"
-                                        value="Estancilla"
-                                    />
-                                </Picker>
-                            </Item>
-                            <Item picker>
-                                <Picker
-                                    mode="dropdown"
-                                    iosIcon={<Icon name="arrow-down" />}
-                                    style={{ width: undefined }}
-                                    placeholder="Distrito"
-                                    placeholderStyle={{ color: '#bfc6ea' }}
-                                    placeholderIconColor="#007aff"
-                                    selectedValue={this.state.distrito}
-                                    onValueChange={this.onValueChange(
-                                        'distrito'
-                                    )}
-                                >
-                                    <Picker.Item
-                                        label="Distrito 1"
-                                        value="Distrito 1"
-                                    />
-                                </Picker>
-                            </Item>
-                            <InputDataForm />
+                        <Form style={{ paddingHorizontal: 20 }}>
+                            <InputDataForm
+                                registerDataHandler={this.registerDataHandler}
+                            />
                         </Form>
                     </Content>
-                    <Footer>
-                        <Body>
-                            <Button
-                                style={{ alignSelf: 'center' }}
-                                full
-                                transparent
-                                onPress={() => console.log('Registrar')}
-                            >
-                                <Text>Registrar</Text>
-                            </Button>
-                        </Body>
-                    </Footer>
                 </Container>
             );
         } else {
