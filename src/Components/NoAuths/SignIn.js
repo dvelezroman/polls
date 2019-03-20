@@ -85,7 +85,7 @@ class SignIn extends Component {
                         <Spinner />
                     )}
                 </Content>
-                <Footer style={{ flexDirection: 'row' }}>
+                <Footer style={{ flexDirection: 'row', height: 40 }}>
                     <Body style={{ flex: 5 }}>
                         <View
                             style={{ marginLeft: 10, flexDirection: 'column' }}
@@ -116,7 +116,6 @@ class SignIn extends Component {
                     </Body>
                     <Left style={{ flex: 1 }}>
                         <Thumbnail
-                            square
                             source={{
                                 uri:
                                     'http://ecuadoruniversitario.com/wp-content/uploads/2015/04/cne-logo.png'
