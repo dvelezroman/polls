@@ -21,7 +21,6 @@ class VerifyIfSession extends Component {
     componentDidMount = async () => {
         let response = await this._retrieveData();
         response = JSON.parse(response);
-        console.log(response);
         this.props.loadUser(response);
     };
 

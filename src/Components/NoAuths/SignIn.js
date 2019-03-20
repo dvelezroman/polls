@@ -2,7 +2,18 @@ import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { Font } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
-import { Container, Content, Text, Button, Spinner } from 'native-base';
+import {
+    Container,
+    Content,
+    Text,
+    Button,
+    Spinner,
+    Footer,
+    Body,
+    Left,
+    Thumbnail,
+    View
+} from 'native-base';
 import { StyleSheet } from 'react-native';
 import SignInForm from './Forms/SignInForm';
 import { user } from '../../ActionCreators';
@@ -74,6 +85,45 @@ class SignIn extends Component {
                         <Spinner />
                     )}
                 </Content>
+                <Footer style={{ flexDirection: 'row' }}>
+                    <Body style={{ flex: 5 }}>
+                        <View
+                            style={{ marginLeft: 10, flexDirection: 'column' }}
+                        >
+                            <Text
+                                style={{
+                                    fontSize: 12,
+                                    alignSelf: 'center',
+                                    fontFamily: 'sans-serif',
+                                    fontStyle: 'italic',
+                                    color: 'white'
+                                }}
+                            >
+                                Versión: 20190320
+                            </Text>
+                            <Text
+                                style={{
+                                    fontSize: 14,
+                                    alignSelf: 'center',
+                                    fontFamily: 'sans-serif',
+                                    fontStyle: 'italic',
+                                    color: 'white'
+                                }}
+                            >
+                                CaffeinaSW, software factory.
+                            </Text>
+                        </View>
+                    </Body>
+                    <Left style={{ flex: 1 }}>
+                        <Thumbnail
+                            square
+                            source={{
+                                uri:
+                                    'http://ecuadoruniversitario.com/wp-content/uploads/2015/04/cne-logo.png'
+                            }}
+                        />
+                    </Left>
+                </Footer>
             </Container>
         );
     };

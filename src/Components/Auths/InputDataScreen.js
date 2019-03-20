@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-
+import Spinner from 'react-native-loading-spinner-overlay';
 import { Font } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
 import {
@@ -11,20 +11,26 @@ import {
     Content,
     Button,
     Icon,
-    Footer,
     Right,
     Text,
     Title,
+    Subtitle,
     Left,
     Form,
-    Item,
-    Picker
+    Toast
 } from 'native-base';
 
+import { storage } from '../../ActionCreators';
 import InputDataForm from './Forms/InputDataForm';
 
 const mapStateToProps = state => ({
-    logged: state.userReducer
+    logged: state.userReducer,
+    loading: state.loadingReducer
+});
+
+const mapDispatchToProps = dispatch => ({
+    saveRegs: values => dispatch(storage.saveToStorage(values)),
+    fetchRegsFromLocal: () => dispatch(storage.getFromStorage())
 });
 
 class InputDataScreen extends Component {
@@ -32,23 +38,36 @@ class InputDataScreen extends Component {
         super(props);
         this.state = {
             fontLoaded: false,
-            provincia: 'Manabí',
+            provincia: 'Manabi',
             canton: 'Tosagua',
-            parroquia: 'Tosagua',
-            distrito: 'Distrito 1'
+            distrito: 'Distrito 1',
+            register: {},
+            msg: 'Cargando...'
         };
-        this.onValueChange = this.onValueChange.bind(this);
     }
 
-    onValueChange = name => value => {
-        console.log(value);
-        this.setState({
-            [name]: value
-        });
-    };
-
-    registerDataHandler = values => {
-        console.log(values);
+    registerDataHandler = async values => {
+        const { parroquia, mesa, favor, blancos, nulos } = values;
+        const { provincia, canton, distrito } = this.state;
+        if (!mesa || !favor || !blancos || !nulos) {
+            Toast.show({
+                text: 'Debe completar los datos!',
+                type: 'warning',
+                duration: 2000
+            });
+        } else {
+            const register = {
+                provincia,
+                canton,
+                distrito,
+                parroquia: parroquia ? parroquia : 'Tosagua',
+                mesa,
+                favor,
+                blancos,
+                nulos
+            };
+            await this.props.saveRegs(register);
+        }
     };
 
     async componentWillMount() {
@@ -60,15 +79,21 @@ class InputDataScreen extends Component {
         this.setState({ fontLoaded: true });
     }
 
-    componentDidMount = () => {};
+    componentDidMount = () => {
+        this.props.fetchRegsFromLocal();
+    };
 
     render = () => {
-        console.log(this.state);
+        console.log(this.props.loading);
         if (this.state.fontLoaded) {
             return (
-                <Container>
-                    <Header style={{ paddingTop: 20 }}>
-                        <Left>
+                <Container style={{ backgroundColor: 'black' }}>
+                    <Header
+                        style={{
+                            marginTop: 25
+                        }}
+                    >
+                        <Left style={{ alignSelf: 'center', flex: 1 }}>
                             <Button
                                 transparent
                                 onPress={() =>
@@ -78,21 +103,42 @@ class InputDataScreen extends Component {
                                 <Icon name="menu" />
                             </Button>
                         </Left>
-                        <Body>
-                            <Title>Ingreso de Votos</Title>
+                        <Body style={{ alignSelf: 'center', flex: 4 }}>
+                            <Title
+                                style={{ fontSize: 20, alignSelf: 'center' }}
+                            >
+                                Registro
+                            </Title>
+                            <Subtitle
+                                style={{ fontSize: 14, alignSelf: 'center' }}
+                            >
+                                de votos
+                            </Subtitle>
                         </Body>
-                        <Right>
+                        <Right style={{ alignSelf: 'center', flex: 1 }}>
                             <Badge info>
                                 <Text>{this.props.logged.username[0]}</Text>
                             </Badge>
                         </Right>
                     </Header>
-                    <Content>
-                        <Form style={{ paddingHorizontal: 20 }}>
-                            <InputDataForm
-                                registerDataHandler={this.registerDataHandler}
+                    <Content style={{ backgroundColor: '#F0F0F0' }}>
+                        {!this.props.loading ? (
+                            <Form style={{ paddingHorizontal: 20 }}>
+                                <InputDataForm
+                                    registerDataHandler={
+                                        this.registerDataHandler
+                                    }
+                                />
+                            </Form>
+                        ) : (
+                            <Spinner
+                                visible={this.props.loading}
+                                animation="fade"
+                                cancelable={false}
+                                textContent={this.state.msg}
+                                textStyle={{ color: 'blue' }}
                             />
-                        </Form>
+                        )}
                     </Content>
                 </Container>
             );
@@ -102,4 +148,7 @@ class InputDataScreen extends Component {
     };
 }
 
-export default connect(mapStateToProps)(InputDataScreen);
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(InputDataScreen);

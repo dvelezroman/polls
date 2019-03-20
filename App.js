@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import store from './src/Store';
-import { StyleSheet, Text, View, YellowBox } from 'react-native';
+import { View, Root } from 'native-base';
+import { StyleSheet, YellowBox } from 'react-native';
 import Home from './src/Home';
 
 console.disableYellowBox = ['Setting a timer'];
@@ -15,7 +16,9 @@ export default class App extends Component {
         return (
             <View style={styles.container}>
                 <Provider store={store}>
-                    <Home />
+                    <Root>
+                        <Home />
+                    </Root>
                 </Provider>
             </View>
         );

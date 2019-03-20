@@ -10,6 +10,7 @@ const fieldName = props => {
                 style={styles.textInput}
                 placeholder={props.placeholder}
                 value={props.input.value}
+                textContentType={props.type}
                 keyboardType={
                     props.input.name === 'email' ? 'email-address' : 'default'
                 }
@@ -44,7 +45,7 @@ const validate = (values, props) => {
     }
 
     if (!values.email) {
-        errors.email = 'required';
+        errors.email = 'requerido';
     } else if (
         !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
     ) {
@@ -71,21 +72,29 @@ const validate = (values, props) => {
 const SignUpForm = props => {
     return (
         <Fragment>
-            <Field name="name" component={fieldName} placeholder="nombre" />
+            <Field
+                name="name"
+                component={fieldName}
+                placeholder="nombre"
+                type="username"
+            />
             <Field
                 name="email"
                 component={fieldName}
                 placeholder="correo electrónico"
+                type="emailAddress"
             />
             <Field
                 name="password"
                 component={fieldName}
                 placeholder="ingrese una contraseña"
+                type="password"
             />
             <Field
                 name="conf_password"
                 component={fieldName}
                 placeholder="confirme contraseña"
+                type="password"
             />
             <Button
                 style={{ marginVertical: 20 }}

@@ -1,15 +1,28 @@
 import { call, put, select } from 'redux-saga/effects';
 import { AsyncStorage } from 'react-native';
-import { register, error } from '../ActionCreators';
+import { Toast } from 'native-base';
+import { register, error, loading } from '../ActionCreators';
 
 const _saveData = async registers => {
     try {
         await AsyncStorage.setItem('registers@poll', JSON.stringify(registers));
+        Toast.show({
+            text: 'Se guardó el registro',
+            textStyle: { height: 50 },
+            type: 'success',
+            duration: 2000
+        });
         return {
             error: false,
             msg: `Se guardó el registro`
         };
     } catch (err) {
+        Toast.show({
+            text: 'No se pudo guardar el registro!',
+            textStyle: { height: 50 },
+            type: 'danger',
+            duration: 2000
+        });
         return {
             error: true,
             msg: 'No se pudo guardar el registro!'
@@ -54,10 +67,12 @@ const getRegisters = state => state.registerReducer;
 
 export function* workerSaveToStorage(values) {
     try {
+        yield put(loading.working());
         const registers = yield select(getRegisters);
         registers.push(values.payload);
-        yield call(_saveData, registers);
+        const saveResponse = yield call(_saveData, registers);
         yield put(register.saveDataToLocalStorage(registers));
+        yield put(loading.rest());
     } catch (err) {
         console.log(err);
     }
@@ -65,8 +80,10 @@ export function* workerSaveToStorage(values) {
 
 export function* workerGetFromStorage() {
     try {
+        yield put(loading.working());
         const registers = yield call(_fetchData);
-        yield call(register.saveDataToLocalStorage(registers));
+        yield put(register.saveDataToLocalStorage(registers.data));
+        yield put(loading.rest());
     } catch (err) {
         console.log(err);
     }
@@ -74,8 +91,10 @@ export function* workerGetFromStorage() {
 
 export function* workerClearStorage() {
     try {
+        yield put(loading.working());
         yield call(_clearStorage);
         yield put(register.deleteDataFromStorage());
+        yield put(loading.rest());
     } catch (err) {
         console.log(err);
     }

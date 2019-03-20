@@ -1,5 +1,5 @@
 import { takeEvery } from 'redux-saga/effects';
-import { USER, STORAGE } from '../ActionTypes';
+import { USER, STORAGE, FIREBASE } from '../ActionTypes';
 import { workerSignIn, workerSignOut } from './signIn';
 import { workerSignUp } from './signUp';
 import {
@@ -7,6 +7,7 @@ import {
     workerGetFromStorage,
     workerClearStorage
 } from './register';
+import { workerUploadToFirebase } from './loadToFirebase';
 
 export default function* watcher() {
     // listen and catch events
@@ -16,6 +17,7 @@ export default function* watcher() {
     yield takeEvery(STORAGE.SAVE_TO_STORAGE, workerSaveToStorage);
     yield takeEvery(STORAGE.GET_FROM_STORAGE, workerGetFromStorage);
     yield takeEvery(STORAGE.CLEAR_STORAGE, workerClearStorage);
+    yield takeEvery(FIREBASE.UPLOAD, workerUploadToFirebase);
 }
 
 // TODO : una vez que se loggea , guardar localmente una sesion del usuario

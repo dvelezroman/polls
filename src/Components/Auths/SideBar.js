@@ -6,7 +6,10 @@ import { user } from '../../ActionCreators';
 
 const pesebrePic = require('../../../assets/pesebre.jpg');
 
-const routes = [{ to: 'Home', icon: 'home' }];
+const routes = [
+    { to: 'Registrar', icon: 'home' },
+    { to: 'Resumen', icon: 'calculator' }
+];
 
 const mapDispatchToProps = dispatch => ({
     logOut: () => dispatch(user.signOut())
@@ -15,19 +18,20 @@ const mapDispatchToProps = dispatch => ({
 class SideBar extends React.Component {
     render() {
         return (
-            <View style={{ flex: 1 }}>
-                <View style={{ flex: 2 }}>
+            <View style={{ flex: 1, backgroundColor: 'black' }}>
+                <View style={{ flex: 2, marginTop: 25 }}>
                     <Image
                         source={pesebrePic}
                         style={{
-                            height: 120,
+                            height: '100%',
                             width: '100%',
+                            borderRadius: 10,
                             alignSelf: 'stretch',
                             position: 'absolute'
                         }}
                     />
                 </View>
-                <View style={{ flex: 5 }}>
+                <View style={{ flex: 5, backgroundColor: '#F0F0F0' }}>
                     <List
                         dataArray={routes}
                         contentContainerStyle={{}}
@@ -39,10 +43,14 @@ class SideBar extends React.Component {
                                         this.props.navigation.navigate(data.to)
                                     }
                                 >
-                                    <Left>
-                                        <Icon name={data.icon} />
+                                    <Left style={{ flex: 1 }}>
+                                        <Icon small name={data.icon} />
                                     </Left>
-                                    <Body>
+                                    <Body
+                                        style={{
+                                            flex: 5
+                                        }}
+                                    >
                                         <Text>{data.to}</Text>
                                     </Body>
                                 </ListItem>
@@ -50,12 +58,12 @@ class SideBar extends React.Component {
                         }}
                     />
                 </View>
-                <View style={{ flex: 1 }}>
+                <View style={{ flex: 1, backgroundColor: '#F0F0F0' }}>
                     <ListItem button onPress={this.props.logOut}>
-                        <Left>
+                        <Left style={{ flex: 1 }}>
                             <Icon name="md-log-out" />
                         </Left>
-                        <Body>
+                        <Body style={{ flex: 5 }}>
                             <Text>Log Out</Text>
                         </Body>
                     </ListItem>

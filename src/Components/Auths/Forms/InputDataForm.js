@@ -7,6 +7,7 @@ const pickerName = props => {
     return (
         <Item picker>
             <Picker
+                style={{ flex: 1 }}
                 mode="dropdown"
                 iosIcon={<Icon name="arrow-down" />}
                 style={{ width: undefined }}
@@ -14,7 +15,6 @@ const pickerName = props => {
                 placeholderIconColor="#007aff"
                 selectedValue={props.input.value}
                 onValueChange={props.input.onChange}
-                //onValueChange={this.onValueChange('parroquia')}
             >
                 <Picker.Item label="Tosagua" value="Tosagua" />
                 <Picker.Item label="Bachillero" value="Bachillero" />
@@ -34,14 +34,11 @@ const fieldName = props => {
             <Input
                 style={styles.textInput}
                 value={props.input.value}
+                type="number"
                 keyboardType={'phone-pad'}
                 onChangeText={props.input.onChange}
                 autoCapitalize="none"
                 onBlur={props.input.onBlur}
-                secureTextEntry={
-                    props.input.name === 'password' ||
-                    props.input.name === 'conf_password'
-                }
             />
             {props.meta.touched && props.meta.error && (
                 <Text style={styles.error}>{props.meta.error}</Text>
@@ -52,41 +49,6 @@ const fieldName = props => {
 
 const validate = (values, props) => {
     const errors = {};
-
-    if (!props.image) {
-        errors.image = 'requerido';
-    }
-
-    if (!values.name) {
-        errors.name = 'requerido';
-    } else if (values.name.length < 5) {
-        errors.name = 'Nombre muy corto';
-    } else if (values.name.length > 10) {
-        errors.name = 'Nombre muy largo';
-    }
-
-    if (!values.email) {
-        errors.email = 'required';
-    } else if (
-        !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
-    ) {
-        errors.email = 'direccion de correo inválido';
-    }
-
-    if (!values.password) {
-        errors.password = 'requerido';
-    } else if (values.password.length < 5) {
-        errors.password = 'password muy corta';
-    } else if (values.password.length > 15) {
-        errors.password = 'password muy larga';
-    }
-
-    if (!values.conf_password) {
-        errors.conf_password = 'requerido';
-    } else if (values.conf_password !== values.password) {
-        errors.conf_password = 'contraseña no coincide';
-    }
-
     return errors;
 };
 
@@ -97,6 +59,11 @@ const InputDataForm = props => {
                 name="parroquia"
                 component={pickerName}
                 placeholder="Parroquia"
+            />
+            <Field
+                name="mesa"
+                component={fieldName}
+                placeholder="Numero de Mesa"
             />
             <Field
                 name="favor"

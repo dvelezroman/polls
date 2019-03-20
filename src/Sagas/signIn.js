@@ -1,5 +1,6 @@
 import { call, put } from 'redux-saga/effects';
 import { AsyncStorage } from 'react-native';
+import { Toast } from 'native-base';
 import { authentication, firebaseDataBase } from '../Store/Services/Firebase';
 import { user, error, loading } from '../ActionCreators';
 
@@ -45,6 +46,12 @@ export function* workerSignIn(values) {
             yield call(_storeData, dataUser);
             yield put(user.loadUser(dataUser));
         } else {
+            Toast.show({
+                text: 'Usuario o Contraseña Inválida',
+                textStyle: { height: 50, paddingLeft: 20 },
+                type: 'danger',
+                duration: 2000
+            });
             yield put(error.setError(response));
         }
         yield put(loading.rest());
