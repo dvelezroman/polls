@@ -3,9 +3,15 @@ import { AsyncStorage } from 'react-native';
 import { Toast } from 'native-base';
 import { register, error, loading } from '../ActionCreators';
 
+import { tosagua } from '../Components/Auths/Mock';
+const data = tosagua;
+
 const _saveData = async registers => {
     try {
-        await AsyncStorage.setItem('registers@poll', JSON.stringify(registers));
+        await AsyncStorage.setItem(
+            `${data.key}@registers@poll`,
+            JSON.stringify(registers)
+        );
         Toast.show({
             text: 'Se guardó el registro',
             textStyle: { height: 50 },
@@ -32,7 +38,9 @@ const _saveData = async registers => {
 
 const _fetchData = async () => {
     try {
-        let registers = await AsyncStorage.getItem('registers@poll');
+        let registers = await AsyncStorage.getItem(
+            `${data.key}@registers@poll`
+        );
         registers = JSON.parse(registers);
         return {
             error: false,
@@ -50,7 +58,7 @@ const _fetchData = async () => {
 
 const _clearStorage = async () => {
     try {
-        await AsyncStorage.removeItem('registers@poll');
+        await AsyncStorage.removeItem(`${data.key}@registers@poll`);
         return {
             error: false,
             msg: 'Se limpió el Storage'

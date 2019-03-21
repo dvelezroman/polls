@@ -4,7 +4,8 @@ import { AppRegistry, Image, StatusBar } from 'react-native';
 import { Text, List, Left, Body, ListItem, Icon, View } from 'native-base';
 import { user } from '../../ActionCreators';
 
-const pesebrePic = require('../../../assets/pesebre.jpg');
+import { tosagua } from './Mock';
+const data = tosagua;
 
 const routes = [
     { to: 'Registrar', icon: 'home' },
@@ -21,7 +22,7 @@ class SideBar extends React.Component {
             <View style={{ flex: 1, backgroundColor: 'black' }}>
                 <View style={{ flex: 2, marginTop: 25 }}>
                     <Image
-                        source={pesebrePic}
+                        source={data.profilePic}
                         style={{
                             height: '100%',
                             width: '100%',

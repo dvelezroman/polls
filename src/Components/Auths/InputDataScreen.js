@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
+import _ from 'lodash';
 import Spinner from 'react-native-loading-spinner-overlay';
 import { Font } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
@@ -20,8 +21,11 @@ import {
     Toast
 } from 'native-base';
 
-import { storage } from '../../ActionCreators';
+import { storage, loading } from '../../ActionCreators';
 import InputDataForm from './Forms/InputDataForm';
+
+import { tosagua } from './Mock';
+const data = tosagua;
 
 const mapStateToProps = state => ({
     logged: state.userReducer,
@@ -30,7 +34,10 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
     saveRegs: values => dispatch(storage.saveToStorage(values)),
-    fetchRegsFromLocal: () => dispatch(storage.getFromStorage())
+    fetchRegsFromLocal: () => dispatch(storage.getFromStorage()),
+    clearRegs: () => dispatch(storage.clearStorage()),
+    working: () => dispatch(loading.working()),
+    rest: () => dispatch(loading.rest())
 });
 
 class InputDataScreen extends Component {
@@ -39,16 +46,36 @@ class InputDataScreen extends Component {
         this.state = {
             fontLoaded: false,
             provincia: 'Manabi',
-            canton: 'Tosagua',
-            distrito: 'Distrito 1',
+            canton: null,
+            parroquia: null,
+            recinto: null,
+            recintos: [],
             register: {},
             msg: 'Cargando...'
         };
     }
 
+    filterRecintos = parroquia => {
+        const recintos = data.recintos;
+        const recintosFiltered = _.filter(
+            recintos,
+            recinto => recinto.from === parroquia
+        );
+        return recintosFiltered;
+    };
+
+    onSelect = item => {
+        let recintos = this.state.recintos;
+        console.log(item);
+        if (item.name === 'parroquia') {
+            recintos = this.filterRecintos(item.value);
+        }
+        this.setState({ [item.name]: item.value, recintos });
+    };
+
     registerDataHandler = async values => {
-        const { parroquia, mesa, favor, blancos, nulos } = values;
-        const { provincia, canton, distrito } = this.state;
+        const { mesa, favor, blancos, nulos } = values;
+        const { provincia, canton, parroquia, recinto } = this.state;
         if (!mesa || !favor || !blancos || !nulos) {
             Toast.show({
                 text: 'Debe completar los datos!',
@@ -56,17 +83,20 @@ class InputDataScreen extends Component {
                 duration: 2000
             });
         } else {
+            this.props.working();
             const register = {
                 provincia,
                 canton,
-                distrito,
-                parroquia: parroquia ? parroquia : 'Tosagua',
+                parroquia,
+                recinto,
                 mesa,
                 favor,
                 blancos,
                 nulos
             };
+
             await this.props.saveRegs(register);
+            this.props.rest();
         }
     };
 
@@ -80,11 +110,19 @@ class InputDataScreen extends Component {
     }
 
     componentDidMount = () => {
+        //this.props.clearRegs();
+        const recintos = this.filterRecintos(data.parroquia);
         this.props.fetchRegsFromLocal();
+        this.setState({
+            recintos,
+            canton: data.canton,
+            parroquia: data.parroquia,
+            recinto: data.recinto ? data.recinto : null
+        });
     };
 
     render = () => {
-        console.log(this.props.loading);
+        console.log('Loading: ', this.props.loading);
         if (this.state.fontLoaded) {
             return (
                 <Container style={{ backgroundColor: 'black' }}>
@@ -105,12 +143,18 @@ class InputDataScreen extends Component {
                         </Left>
                         <Body style={{ alignSelf: 'center', flex: 4 }}>
                             <Title
-                                style={{ fontSize: 20, alignSelf: 'center' }}
+                                style={{
+                                    fontSize: 20,
+                                    alignSelf: 'center'
+                                }}
                             >
                                 Registro
                             </Title>
                             <Subtitle
-                                style={{ fontSize: 14, alignSelf: 'center' }}
+                                style={{
+                                    fontSize: 14,
+                                    alignSelf: 'center'
+                                }}
                             >
                                 de votos
                             </Subtitle>
@@ -121,10 +165,16 @@ class InputDataScreen extends Component {
                             </Badge>
                         </Right>
                     </Header>
+
                     <Content style={{ backgroundColor: '#F0F0F0' }}>
                         {!this.props.loading ? (
                             <Form style={{ paddingHorizontal: 20 }}>
                                 <InputDataForm
+                                    parroquia={this.state.parroquia}
+                                    recinto={this.state.recinto}
+                                    onSelect={this.onSelect}
+                                    parroquias={data.parroquias}
+                                    recintos={this.state.recintos}
                                     registerDataHandler={
                                         this.registerDataHandler
                                     }

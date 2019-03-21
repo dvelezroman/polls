@@ -105,11 +105,11 @@ class ResumeScreen extends Component {
                         {!this.props.loading ? (
                             <List>
                                 {regs.map((reg, i) => (
-                                    <ListItem key={i}>
+                                    <ListItem key={i + 1}>
                                         <Text
                                             style={{ fontSize: 14, width: 20 }}
                                         >
-                                            {i}
+                                            {i + 1}
                                         </Text>
                                         <Left
                                             style={{

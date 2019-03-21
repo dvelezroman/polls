@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Font } from 'expo';
 import { Ionicons } from '@expo/vector-icons';
 import { Container, Content, Text, Button, Spinner } from 'native-base';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, KeyboardAvoidingView } from 'react-native';
 import SignUpForm from './Forms/SignUpForm';
 
 import { user } from '../../ActionCreators/index';
@@ -41,25 +41,29 @@ class SignUp extends Component {
                 <Content contentContainerStyle={styles.container}>
                     {this.state.fontLoaded && !this.props.loading ? (
                         <Fragment>
-                            <Text
-                                style={{
-                                    color: '#C0C0C0',
-                                    alignSelf: 'center'
-                                }}
-                            >
-                                Registrar Nuevo Usuario
-                            </Text>
-                            <SignUpForm
-                                userRegisterHandler={this.userRegisterHandler}
-                            />
+                            <KeyboardAvoidingView behavior="padding" enabled>
+                                <Text
+                                    style={{
+                                        color: '#C0C0C0',
+                                        alignSelf: 'center'
+                                    }}
+                                >
+                                    Registrar Nuevo Usuario
+                                </Text>
+                                <SignUpForm
+                                    userRegisterHandler={
+                                        this.userRegisterHandler
+                                    }
+                                />
 
-                            <Button
-                                style={{ alignSelf: 'center' }}
-                                transparent
-                                onPress={() => navigation.goBack()}
-                            >
-                                <Text>Regresar</Text>
-                            </Button>
+                                <Button
+                                    style={{ alignSelf: 'center' }}
+                                    transparent
+                                    onPress={() => navigation.goBack()}
+                                >
+                                    <Text>Regresar</Text>
+                                </Button>
+                            </KeyboardAvoidingView>
                         </Fragment>
                     ) : (
                         <Spinner />

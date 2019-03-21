@@ -21,6 +21,9 @@
             "supportsTablet": true,
             "bundleIdentifier": "com.caffeinasw.polls"
         },
+        "android": {
+            "package": "com.caffeinasw.polls"
+        },
         "description": "Aplicaction for count votes for City Major Elections",
         "githubUrl": "https://github.com/dvelezroman/polls"
     }

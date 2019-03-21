@@ -1,9 +1,10 @@
 import React, { Fragment } from 'react';
 import { Button, Icon, Item, Input, Text, Label, Picker } from 'native-base';
-import { StyleSheet } from 'react-native';
+import { StyleSheet, KeyboardAvoidingView } from 'react-native';
 import { Field, reduxForm } from 'redux-form';
 
 const pickerName = props => {
+    const { data, input } = props;
     return (
         <Item picker>
             <Picker
@@ -13,15 +14,16 @@ const pickerName = props => {
                 style={{ width: undefined }}
                 placeholderStyle={{ color: '#bfc6ea' }}
                 placeholderIconColor="#007aff"
-                selectedValue={props.input.value}
-                onValueChange={props.input.onChange}
+                selectedValue={props.selected}
+                onValueChange={value => props.onSelect({ name: input, value })}
             >
-                <Picker.Item label="Tosagua" value="Tosagua" />
-                <Picker.Item label="Bachillero" value="Bachillero" />
-                <Picker.Item
-                    label="Angel Pedro Giler, (La Estancilla)"
-                    value="Estancilla"
-                />
+                {data.map((item, i) => (
+                    <Picker.Item
+                        key={i}
+                        label={item.label}
+                        value={item.value}
+                    />
+                ))}
             </Picker>
         </Item>
     );
@@ -55,38 +57,56 @@ const validate = (values, props) => {
 const InputDataForm = props => {
     return (
         <Fragment>
-            <Field
-                name="parroquia"
-                component={pickerName}
-                placeholder="Parroquia"
-            />
-            <Field
-                name="mesa"
-                component={fieldName}
-                placeholder="Numero de Mesa"
-            />
-            <Field
-                name="favor"
-                component={fieldName}
-                placeholder="Votos a favor"
-            />
-            <Field
-                name="nulos"
-                component={fieldName}
-                placeholder="Votos Nulos"
-            />
-            <Field
-                name="blancos"
-                component={fieldName}
-                placeholder="Votos en Blanco"
-            />
-            <Button
-                style={{ marginVertical: 20 }}
-                full
-                onPress={props.handleSubmit(props.registerDataHandler)}
-            >
-                <Text>Registrar</Text>
-            </Button>
+            <KeyboardAvoidingView behavior="padding" enabled>
+                <Field
+                    name="parroquia"
+                    component={pickerName}
+                    placeholder="Parroquia"
+                    selected={props.parroquia}
+                    data={props.parroquias}
+                    onSelect={props.onSelect}
+                    input="parroquia"
+                />
+                {props.recintos.lenght > 0 ? (
+                    <Field
+                        name="recinto"
+                        component={pickerName}
+                        placeholder="Recinto"
+                        data={props.recintos}
+                        selected={props.recinto}
+                        onSelect={props.onSelect}
+                        input="recinto"
+                    />
+                ) : null}
+
+                <Field
+                    name="mesa"
+                    component={fieldName}
+                    placeholder="Numero de Mesa"
+                />
+                <Field
+                    name="favor"
+                    component={fieldName}
+                    placeholder="Votos a favor"
+                />
+                <Field
+                    name="nulos"
+                    component={fieldName}
+                    placeholder="Votos Nulos"
+                />
+                <Field
+                    name="blancos"
+                    component={fieldName}
+                    placeholder="Votos en Blanco"
+                />
+                <Button
+                    style={{ marginVertical: 20 }}
+                    full
+                    onPress={props.handleSubmit(props.registerDataHandler)}
+                >
+                    <Text>Registrar</Text>
+                </Button>
+            </KeyboardAvoidingView>
         </Fragment>
     );
 };
