@@ -2,22 +2,40 @@ import React, { Component } from 'react';
 import { Provider } from 'react-redux';
 import store from './src/Store';
 import { View, Root } from 'native-base';
-import { StyleSheet, YellowBox } from 'react-native';
+import { StyleSheet, LogBox } from 'react-native';
+import * as Font from 'expo-font'
+import { Ionicons } from '@expo/vector-icons';
+
 import Home from './src/Home';
 
-console.disableYellowBox = ['Setting a timer'];
-console.disableYellowBox = ['Remote debugger'];
-
-YellowBox.ignoreWarnings(['Setting a timer']);
-YellowBox.ignoreWarnings(['Remote debugger']);
+LogBox.ignoreAllLogs = ['Setting a timer'];
+LogBox.ignoreAllLogs = ['Remote debugger'];
 
 export default class App extends Component {
+    constructor() {
+        super();
+        this.state = {
+            fontLoaded: false,
+        };
+        this.loadFont();
+    }
+    async loadFont() {
+        await Font.loadAsync({
+            Roboto: require('native-base/Fonts/Roboto.ttf'),
+            Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
+            ...Ionicons.font
+        });
+        this.setState({ fontLoaded: true });
+    }
     render() {
         return (
             <View style={styles.container}>
                 <Provider store={store}>
                     <Root>
-                        <Home />
+                        {this.state.fontLoaded ?
+                            <Home /> :
+                            null
+                        }
                     </Root>
                 </Provider>
             </View>

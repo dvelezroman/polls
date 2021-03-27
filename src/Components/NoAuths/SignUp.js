@@ -18,28 +18,16 @@ const mapDispatchToProps = dispatch => ({
 });
 
 class SignUp extends Component {
-    state = {
-        fontLoaded: false
-    };
     userRegisterHandler = values => {
         this.props.signUp(values);
     };
-
-    async componentWillMount() {
-        await Font.loadAsync({
-            Roboto: require('native-base/Fonts/Roboto.ttf'),
-            Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
-            ...Ionicons.font
-        });
-        this.setState({ fontLoaded: true });
-    }
 
     render() {
         const { navigation } = this.props;
         return (
             <Container>
                 <Content contentContainerStyle={styles.container}>
-                    {this.state.fontLoaded && !this.props.loading ? (
+                    {!this.props.loading ? (
                         <Fragment>
                             <KeyboardAvoidingView behavior="padding" enabled>
                                 <Text

@@ -27,19 +27,6 @@ class SelectImage extends Component {
         }
     };
 
-    componentWillMount() {
-        Permissions.askAsync(Permissions.CAMERA_ROLL).then(response => {
-            this.setState({
-                has_camera_roll_permission: response.status === 'granted'
-            });
-        });
-        Permissions.askAsync(Permissions.CAMERA).then(response => {
-            this.setState({
-                has_camera_permission: response.status === 'granted'
-            });
-        });
-    }
-
     render() {
         let { image, gallery } = this.props;
         return (

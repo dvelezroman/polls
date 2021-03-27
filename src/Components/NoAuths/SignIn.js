@@ -31,25 +31,11 @@ const mapDispatchToProps = dispatch => ({
 });
 
 class SignIn extends Component {
-    state = {
-        fontLoaded: false
-    };
-
     isCancelled = false;
 
     userSignInHandler = values => {
         this.props.signIn(values);
     };
-
-    async componentWillMount() {
-        await Font.loadAsync({
-            Roboto: require('native-base/Fonts/Roboto.ttf'),
-            Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
-            ...Ionicons.font
-        });
-
-        !this.isCancelled && this.setState({ fontLoaded: true });
-    }
 
     componentWillUnmount() {
         this.isCancelled = true; // esto cancela el setState en caso de que exista una sesión iniciada
@@ -60,7 +46,7 @@ class SignIn extends Component {
         return (
             <Container>
                 <Content contentContainerStyle={styles.container}>
-                    {this.state.fontLoaded && !this.props.loading ? (
+                    {!this.props.loading ? (
                         <Fragment>
                             <Text
                                 style={{
@@ -95,7 +81,7 @@ class SignIn extends Component {
                                 style={{
                                     fontSize: 12,
                                     alignSelf: 'center',
-                                    fontFamily: 'sans-serif',
+                                    fontFamily: 'Roboto',
                                     fontStyle: 'italic',
                                     color: 'white'
                                 }}
@@ -106,7 +92,7 @@ class SignIn extends Component {
                                 style={{
                                     fontSize: 14,
                                     alignSelf: 'center',
-                                    fontFamily: 'sans-serif',
+                                    fontFamily: 'Roboto',
                                     fontStyle: 'italic',
                                     color: 'white'
                                 }}

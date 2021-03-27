@@ -1,17 +1,17 @@
-import firebase from 'firebase';
+import { initializeApp, auth, storage, database } from 'firebase';
 
 // Initialize Firebase
 var config = {
-    apiKey: 'AIzaSyAqEYhEbMKrwh5eVHWg5OC9Ur0FqWzvn3c',
-    authDomain: 'exitpoll-032019.firebaseapp.com',
-    databaseURL: 'https://exitpoll-032019.firebaseio.com',
-    projectId: 'exitpoll-032019',
-    storageBucket: 'exitpoll-032019.appspot.com',
-    messagingSenderId: '730406529437'
+    apiKey: "AIzaSyA3YDairAP8eI3uilxxTYQl9bfvQJ59rI4",
+    authDomain: "polls-9acff.firebaseapp.com",
+    projectId: "polls-9acff",
+    databaseURL: "https://polls-9acff-default-rtdb.firebaseio.com/",
+    storageBucket: "polls-9acff.appspot.com",
+    appId: "1:497226188154:web:382572e28046739ccb02c3",
 };
 
-firebase.initializeApp(config);
+initializeApp(config);
 
-export const authentication = firebase.auth();
-export const firebaseDataBase = firebase.database();
-export const firebaseStorage = firebase.storage();
+export const authentication = auth();
+export const firebaseDataBase = database();
+export const firebaseStorage = storage();

@@ -36,7 +36,8 @@ class SideBar extends React.Component {
                     <List
                         dataArray={routes}
                         contentContainerStyle={{}}
-                        renderRow={data => {
+                        keyExtractor={(data, index) => index.toString()}
+                        renderRow={(data) => {
                             return (
                                 <ListItem
                                     button

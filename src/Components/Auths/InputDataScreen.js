@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import filter from 'lodash/filter';
 import Spinner from 'react-native-loading-spinner-overlay';
@@ -100,15 +100,6 @@ class InputDataScreen extends Component {
         }
     };
 
-    async componentWillMount() {
-        await Font.loadAsync({
-            Roboto: require('native-base/Fonts/Roboto.ttf'),
-            Roboto_medium: require('native-base/Fonts/Roboto_medium.ttf'),
-            ...Ionicons.font
-        });
-        this.setState({ fontLoaded: true });
-    }
-
     componentDidMount = () => {
         //this.props.clearRegs();
         const recintos = this.filterRecintos(data.parroquia);
@@ -122,79 +113,74 @@ class InputDataScreen extends Component {
     };
 
     render = () => {
-        console.log('Loading: ', this.props.loading);
-        if (this.state.fontLoaded) {
-            return (
-                <Container style={{ backgroundColor: 'black' }}>
-                    <Header
-                        style={{
-                            marginTop: 25
-                        }}
-                    >
-                        <Left style={{ alignSelf: 'center', flex: 1 }}>
-                            <Button
-                                transparent
-                                onPress={() =>
-                                    this.props.navigation.openDrawer()
-                                }
-                            >
-                                <Icon name="menu" />
-                            </Button>
-                        </Left>
-                        <Body style={{ alignSelf: 'center', flex: 4 }}>
-                            <Title
-                                style={{
-                                    fontSize: 20,
-                                    alignSelf: 'center'
-                                }}
-                            >
-                                Registro
+        return (
+            <Container style={{ backgroundColor: 'black' }}>
+                <Header
+                    style={{
+                        marginTop: 25
+                    }}
+                >
+                    <Left style={{ alignSelf: 'center', flex: 1 }}>
+                        <Button
+                            transparent
+                            onPress={() =>
+                                this.props.navigation.openDrawer()
+                            }
+                        >
+                            <Icon name="menu" />
+                        </Button>
+                    </Left>
+                    <Body style={{ alignSelf: 'center', flex: 4 }}>
+                        <Title
+                            style={{
+                                fontSize: 20,
+                                alignSelf: 'center'
+                            }}
+                        >
+                            Registro
                             </Title>
-                            <Subtitle
-                                style={{
-                                    fontSize: 14,
-                                    alignSelf: 'center'
-                                }}
-                            >
-                                de votos
+                        <Subtitle
+                            style={{
+                                fontSize: 14,
+                                alignSelf: 'center'
+                            }}
+                        >
+                            de votos
                             </Subtitle>
-                        </Body>
-                        <Right style={{ alignSelf: 'center', flex: 1 }}>
-                            <Badge info>
-                                <Text>{this.props.logged.username[0]}</Text>
-                            </Badge>
-                        </Right>
-                    </Header>
+                    </Body>
+                    <Right style={{ alignSelf: 'center', flex: 1 }}>
+                        <Badge info>
+                            <Text>{this.props.logged.username[0]}</Text>
+                        </Badge>
+                    </Right>
+                </Header>
 
-                    <Content style={{ backgroundColor: '#F0F0F0' }}>
-                        {!this.props.loading ? (
-                            <Form style={{ paddingHorizontal: 20 }}>
-                                <InputDataForm
-                                    parroquia={this.state.parroquia}
-                                    recinto={this.state.recinto}
-                                    onSelect={this.onSelect}
-                                    parroquias={data.parroquias}
-                                    recintos={this.state.recintos}
-                                    registerDataHandler={
-                                        this.registerDataHandler
-                                    }
-                                />
-                            </Form>
-                        ) : (
-                            <Spinner
-                                visible={this.props.loading}
-                                animation="fade"
-                                cancelable={false}
-                                textContent={this.state.msg}
-                                textStyle={{ color: 'blue' }}
+                <Content style={{ backgroundColor: '#F0F0F0' }}>
+                    {!this.props.loading ? (
+                        <Form style={{ paddingHorizontal: 20 }}>
+                            <InputDataForm
+                                parroquia={this.state.parroquia}
+                                recinto={this.state.recinto}
+                                onSelect={this.onSelect}
+                                parroquias={data.parroquias}
+                                recintos={this.state.recintos}
+                                registerDataHandler={
+                                    this.registerDataHandler
+                                }
                             />
-                        )}
-                    </Content>
-                </Container>
-            );
-        } else {
-            return null;
-        }
+                        </Form>
+                    ) : (
+                        <Spinner
+                            visible={this.props.loading}
+                            animation="fade"
+                            cancelable={false}
+                            textContent={this.state.msg}
+                            textStyle={{ color: 'blue' }}
+                        />
+                    )}
+                </Content>
+            </Container>
+        );
     };
 }
 
