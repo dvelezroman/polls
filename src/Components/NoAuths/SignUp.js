@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { Font } from 'expo';
+import * as Font from 'expo-font'
 import { Ionicons } from '@expo/vector-icons';
 import { Container, Content, Text, Button, Spinner } from 'native-base';
 import { StyleSheet, KeyboardAvoidingView } from 'react-native';

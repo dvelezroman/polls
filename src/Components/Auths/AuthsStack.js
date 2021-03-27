@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { createStackNavigator, createAppContainer } from 'react-navigation';
+import { createAppContainer } from 'react-navigation';
+import { createStackNavigator } from 'react-navigation-stack';
 import DrawerStack from './DrawerStack';
 
 const AuthsStack = createStackNavigator(

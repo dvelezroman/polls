@@ -1,8 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import _ from 'lodash';
+import filter from 'lodash/filter';
 import Spinner from 'react-native-loading-spinner-overlay';
-import { Font } from 'expo';
+import * as Font from 'expo-font'
 import { Ionicons } from '@expo/vector-icons';
 import {
     Container,
@@ -57,7 +57,7 @@ class InputDataScreen extends Component {
 
     filterRecintos = parroquia => {
         const recintos = data.recintos;
-        const recintosFiltered = _.filter(
+        const recintosFiltered = filter(
             recintos,
             recinto => recinto.from === parroquia
         );

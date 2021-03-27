@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
-import { createDrawerNavigator, createAppContainer } from 'react-navigation';
+import { createAppContainer } from 'react-navigation';
+import { createDrawerNavigator } from 'react-navigation-drawer';
 import InputDataScreen from './InputDataScreen';
 import SideBar from './SideBar';
 import ResumeScreen from './ResumeScreen';
