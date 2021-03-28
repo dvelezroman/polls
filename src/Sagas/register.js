@@ -1,5 +1,6 @@
 import { call, put, select } from 'redux-saga/effects';
 import AsyncStorage from '@react-native-community/async-storage';
+import find from 'lodash/find';
 import { Toast } from 'native-base';
 import { register, error, loading, storage } from '../ActionCreators';
 
@@ -23,7 +24,6 @@ const _saveData = async registers => {
             msg: `Se guardó el registro`
         };
     } catch (err) {
-        console.log(err)
         Toast.show({
             text: 'No se pudo guardar el registro!',
             textStyle: { height: 50 },
@@ -73,14 +73,27 @@ const _clearStorage = async () => {
     }
 };
 
+const getRegisterFromStorage = (registers, reg) => {
+    return find(registers, (item) => item.sexo === reg.sexo && item.mesa === reg.mesa);
+}
+
 const getRegisters = state => state.registerReducer;
 
 export function* workerSaveToStorage(values) {
     try {
         yield put(loading.working());
         const registers = yield select(getRegisters);
-        yield call(_saveData, [ ...registers, values.payload ]);
-        yield put(storage.loadDataToReducer([ ...registers, values.payload ]));
+        if (getRegisterFromStorage(registers, values.payload) === undefined) {
+            yield call(_saveData, [ ...registers, values.payload ]);
+            yield put(storage.loadDataToReducer([ ...registers, values.payload ]));
+        } else {
+            Toast.show({
+                text: 'Registro para esta mesa ya existe!',
+                textStyle: { height: 50 },
+                type: 'danger',
+                duration: 3000,
+            });
+        }
         yield put(loading.rest());
     } catch (err) {
         console.log(err);

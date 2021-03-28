@@ -34,7 +34,6 @@ const fieldName = props => {
             <Label>{props.placeholder}</Label>
             <Input
                 style={styles.textInput}
-                value={props.input.value}
                 type="number"
                 keyboardType={'numeric'}
                 onChangeText={props.input.onChange}
@@ -98,95 +97,88 @@ const validate = values => {
 
 const InputDataForm = props => {
     return (
-        <Fragment>
-            <KeyboardAvoidingView behavior="height" enabled>
-                <Text
-                    style={styles.title}
-                >
-                    Datos de Junta Receptora del Voto
+        <KeyboardAvoidingView behavior="height" enabled>
+            <Text
+                style={styles.title}
+            >
+                Datos de Junta Receptora del Voto
                 </Text>
-                <Field
-                    name="parroquia"
-                    component={pickerName}
-                    placeholder="Parroquia"
-                    selected={props.parroquia}
-                    data={props.parroquias}
-                    onSelect={props.onSelect}
-                    input="parroquia"
-                />
-                <Field
-                    name="recinto"
-                    component={pickerName}
-                    placeholder="Recinto"
-                    data={props.recintos}
-                    selected={props.recinto}
-                    onSelect={props.onSelect}
-                    input="recinto"
-                />
+            <Field
+                name="parroquia"
+                component={pickerName}
+                placeholder="Parroquia"
+                selected={props.parroquia}
+                data={props.parroquias}
+                onSelect={props.onSelect}
+                input="parroquia"
+            />
+            <Field
+                name="recinto"
+                component={pickerName}
+                placeholder="Recinto"
+                data={props.recintos}
+                selected={props.recinto}
+                onSelect={props.onSelect}
+                input="recinto"
+            />
 
-                <Field
-                    name="sexo"
-                    component={pickerName}
-                    placeholder="Sexo"
-                    data={props.sexos}
-                    selected={props.sexo}
-                    onSelect={props.onSelect}
-                    input="sexo"
-                />
+            <Field
+                name="sexo"
+                component={pickerName}
+                placeholder="Sexo"
+                data={props.sexos}
+                selected={props.sexo}
+                onSelect={props.onSelect}
+                input="sexo"
+            />
 
-                <Field
-                    name="mesa"
-                    component={fieldName}
-                    placeholder="Numero de Mesa"
-                    onChange={(value) => props.onChangeInput('mesa', value)}
-                />
+            <Field
+                name="mesa"
+                component={fieldName}
+                placeholder="Numero de Mesa"
+            />
 
-                <View style={styles.line} />
-                
-                <Text
-                    style={styles.title}
-                >
-                    Datos de Votación
+            <View style={styles.line} />
+
+            <Text
+                style={styles.title}
+            >
+                Datos de Votación
                 </Text>
-                <Field
-                    name="lasso"
-                    component={fieldName}
-                    placeholder="Votos para Guillermo Lasso"
-                    onChange={(value) => props.onChangeInput('lasso', value)}
-                />
-                <Field
-                    name="lelo"
-                    component={fieldName}
-                    placeholder="Votos para Andres Arauz"
-                    onChange={(value) => props.onChangeInput('lelo', value)}
-                />
-                <Field
-                    name="nulos"
-                    component={fieldName}
-                    placeholder="Votos Nulos"
-                    onChange={(value) => props.onChangeInput('nulos', value)}
-                />
-                <Field
-                    name="blancos"
-                    component={fieldName}
-                    placeholder="Votos en Blanco"
-                    onChange={(value) => props.onChangeInput('blancos', value)}
-                />
-                <Button
-                    style={{
-                        width: '100%',
-                        justifyContent: 'center',
-                        marginVertical: 30,
-                        alignSelf: 'center',
-                        backgroundColor: 'blue'
-                    }}
-                    transparent
-                    onPress={props.registerDataHandler}
-                >
-                    <Text style={{ color: 'white' }}>Grabar</Text>
-                </Button>
-            </KeyboardAvoidingView>
-        </Fragment>
+            <Field
+                name="lasso"
+                component={fieldName}
+                placeholder="Votos para Guillermo Lasso"
+            />
+            <Field
+                name="lelo"
+                component={fieldName}
+                placeholder="Votos para Andres Arauz"
+            />
+            <Field
+                name="nulos"
+                component={fieldName}
+                placeholder="Votos Nulos"
+            />
+            <Field
+                name="blancos"
+                component={fieldName}
+                placeholder="Votos en Blanco"
+            />
+            <Button
+                style={{
+                    width: '100%',
+                    justifyContent: 'center',
+                    marginVertical: 30,
+                    alignSelf: 'center',
+                    backgroundColor: 'blue'
+                }}
+                transparent
+                onPress={() => props.onSubmit()}
+            >
+                <Text style={{ color: 'white' }}>Grabar</Text>
+            </Button>
+        </KeyboardAvoidingView>
     );
 };
 

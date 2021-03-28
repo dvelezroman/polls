@@ -29,7 +29,8 @@ const data = tosagua;
 
 const mapStateToProps = state => ({
     logged: state.userReducer,
-    loading: state.loadingReducer
+    loading: state.loadingReducer,
+    form: state.formReducer,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -39,19 +40,6 @@ const mapDispatchToProps = dispatch => ({
     working: () => dispatch(loading.working()),
     rest: () => dispatch(loading.rest())
 });
-
-const initialState = {
-    mesa: null,
-    lasso: null,
-    lelo: null,
-    blancos: null,
-    nulos: null,
-    parroquia: null,
-    recinto: null,
-    register: {},
-    msg: 'Cargando...',
-    sexo: null,
-}
 class InputDataScreen extends Component {
     constructor(props) {
         super(props);
@@ -59,23 +47,12 @@ class InputDataScreen extends Component {
             fontLoaded: false,
             provincia: 'Manabi',
             canton: null,
-            mesa: null,
-            lasso: null,
-            lelo: null,
-            blancos: null,
-            nulos: null,
             parroquia: null,
             recinto: null,
             recintos: [],
-            register: {},
             msg: 'Cargando...',
-            sexo: null,
+            sexo: "Mujeres",
         };
-        this.resetState = this.resetState.bind(this);
-    }
-
-    resetState = () => {
-        this.setState(initialState);
     }
 
     filterRecintos = parroquia => {
@@ -102,45 +79,46 @@ class InputDataScreen extends Component {
     };
 
     registerDataHandler = () => {
+        let votos = {};
+        if (this.props.form.InputDataForm.values) {
+            votos = {
+                ...this.props.form.InputDataForm.values
+            };
+        }
+
         const {
             provincia,
             canton,
             parroquia, 
             recinto,
             sexo,
-            mesa,
-            lasso,
-            lelo,
-            blancos,
-            nulos
         } = this.state
-
-        if (!mesa || !lasso || !lelo || !blancos || !nulos || !recinto || !sexo) {
+        if (
+            !votos.mesa ||
+            !votos.lasso ||
+            !votos.lelo ||
+            !votos.blancos ||
+            !votos.nulos
+        ) {
             Toast.show({
                 text: 'Debe completar los datos!',
                 type: 'warning',
                 duration: 2000
             });
         } else {
-            this.props.working();
             const register = {
                 provincia,
                 canton,
                 parroquia,
                 recinto,
-                mesa,
-                lasso,
-                lelo,
-                blancos,
-                nulos,
                 sexo,
+                ...votos,
                 responsable: {
                     nombre: this.props.logged.username,
                     email: this.props.logged.email,
                 }
             };
             this.props.saveRegs(register);
-            this.props.rest(() => this.resetState());
         }
     };
 
@@ -153,7 +131,6 @@ class InputDataScreen extends Component {
             canton: data.canton,
             parroquia: data.parroquias[0].value,
             recinto: recintos.length ? recintos[0].value : "Unico Recinto",
-            sexo: "Mujeres",
         });
     };
 
@@ -211,10 +188,7 @@ class InputDataScreen extends Component {
                                 recintos={this.state.recintos ? this.state.recintos : []}
                                 sexos={data.sexos}
                                 sexo={this.state.sexo}
-                                registerDataHandler={
-                                    this.registerDataHandler
-                                }
-                                onChangeInput={this.onChangeInput}
+                                onSubmit={this.registerDataHandler}
                             />
                         </Form>
                     ) : (

@@ -101,13 +101,14 @@ class ResumeScreen extends Component {
                         </Text>
                     </Left> */}
                     <Body style={{ flex: 2, justifyContent: 'center' }}>
-                        <Button
+                        {regs.length > 0 && <Button
                             style={{ alignSelf: 'center', backgroundColor: 'blue' }}
                             transparent
                             onPress={() => this.upload()}
                         >
                             <Text style={{ color: 'white' }}>Subir Registros al Sistema</Text>
                         </Button>
+                        }
                     </Body>
 
                     {/* <Right style={{ flex: 1 }} /> */}

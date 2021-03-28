@@ -17,7 +17,6 @@ const _upload = async (registers) => {
         const regex = /./g;
         registers.forEach(reg => {
             const recinto = reg.recinto.split(' ').join('_');
-            console.log({ verga: reg.recinto, recinto });
             firebaseDataBase.ref(`actas/Tosagua/${reg.parroquia}/${recinto}/${reg.mesa}/${reg.sexo}`).set(reg);
         })
         

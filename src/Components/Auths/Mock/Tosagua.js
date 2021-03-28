@@ -1,4 +1,4 @@
-const profilePic = require('../../../../assets/pesebre.jpg');
+const profilePic = require('../../../../assets/lasso.png');
 
 const canton = 'Tosagua';
 

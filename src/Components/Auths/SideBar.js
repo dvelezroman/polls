@@ -20,7 +20,7 @@ class SideBar extends React.Component {
     render() {
         return (
             <View style={{ flex: 1, backgroundColor: 'black' }}>
-                <View style={{ flex: 2, marginTop: 25 }}>
+                <View style={{ flex: 3, marginTop: 0 }}>
                     <Image
                         source={data.profilePic}
                         style={{
@@ -66,7 +66,7 @@ class SideBar extends React.Component {
                             <Icon name="md-log-out" />
                         </Left>
                         <Body style={{ flex: 5 }}>
-                            <Text>Log Out</Text>
+                            <Text>Salir</Text>
                         </Body>
                     </ListItem>
                 </View>
