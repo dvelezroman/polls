@@ -40,6 +40,18 @@ const mapDispatchToProps = dispatch => ({
     rest: () => dispatch(loading.rest())
 });
 
+const initialState = {
+    mesa: null,
+    lasso: null,
+    lelo: null,
+    blancos: null,
+    nulos: null,
+    parroquia: null,
+    recinto: null,
+    register: {},
+    msg: 'Cargando...',
+    sexo: null,
+}
 class InputDataScreen extends Component {
     constructor(props) {
         super(props);
@@ -47,12 +59,23 @@ class InputDataScreen extends Component {
             fontLoaded: false,
             provincia: 'Manabi',
             canton: null,
+            mesa: null,
+            lasso: null,
+            lelo: null,
+            blancos: null,
+            nulos: null,
             parroquia: null,
             recinto: null,
             recintos: [],
             register: {},
-            msg: 'Cargando...'
+            msg: 'Cargando...',
+            sexo: null,
         };
+        this.resetState = this.resetState.bind(this);
+    }
+
+    resetState = () => {
+        this.setState(initialState);
     }
 
     filterRecintos = parroquia => {
@@ -64,19 +87,35 @@ class InputDataScreen extends Component {
         return recintosFiltered;
     };
 
+    onChangeInput = (name, value) => {
+        this.setState({ [name]: value })
+    }
+
     onSelect = item => {
         let recintos = this.state.recintos;
-        console.log(item);
+        let recinto = this.state.recinto;
         if (item.name === 'parroquia') {
             recintos = this.filterRecintos(item.value);
+            recinto = recintos[0].value;
         }
-        this.setState({ [item.name]: item.value, recintos });
+        this.setState({ [item.name]: item.value, recintos, recinto });
     };
 
-    registerDataHandler = async values => {
-        const { mesa, favor, blancos, nulos } = values;
-        const { provincia, canton, parroquia, recinto } = this.state;
-        if (!mesa || !favor || !blancos || !nulos) {
+    registerDataHandler = () => {
+        const {
+            provincia,
+            canton,
+            parroquia, 
+            recinto,
+            sexo,
+            mesa,
+            lasso,
+            lelo,
+            blancos,
+            nulos
+        } = this.state
+
+        if (!mesa || !lasso || !lelo || !blancos || !nulos || !recinto || !sexo) {
             Toast.show({
                 text: 'Debe completar los datos!',
                 type: 'warning',
@@ -90,25 +129,31 @@ class InputDataScreen extends Component {
                 parroquia,
                 recinto,
                 mesa,
-                favor,
+                lasso,
+                lelo,
                 blancos,
-                nulos
+                nulos,
+                sexo,
+                responsable: {
+                    nombre: this.props.logged.username,
+                    email: this.props.logged.email,
+                }
             };
-
-            await this.props.saveRegs(register);
-            this.props.rest();
+            this.props.saveRegs(register);
+            this.props.rest(() => this.resetState());
         }
     };
 
     componentDidMount = () => {
-        //this.props.clearRegs();
+        // this.props.clearRegs();
         const recintos = this.filterRecintos(data.parroquia);
         this.props.fetchRegsFromLocal();
         this.setState({
             recintos,
             canton: data.canton,
-            parroquia: data.parroquia,
-            recinto: data.recinto ? data.recinto : null
+            parroquia: data.parroquias[0].value,
+            recinto: recintos.length ? recintos[0].value : "Unico Recinto",
+            sexo: "Mujeres",
         });
     };
 
@@ -160,13 +205,16 @@ class InputDataScreen extends Component {
                         <Form style={{ paddingHorizontal: 20 }}>
                             <InputDataForm
                                 parroquia={this.state.parroquia}
-                                recinto={this.state.recinto}
+                                recinto={this.state.recinto || "Seleccione"}
                                 onSelect={this.onSelect}
                                 parroquias={data.parroquias}
-                                recintos={this.state.recintos}
+                                recintos={this.state.recintos ? this.state.recintos : []}
+                                sexos={data.sexos}
+                                sexo={this.state.sexo}
                                 registerDataHandler={
                                     this.registerDataHandler
                                 }
+                                onChangeInput={this.onChangeInput}
                             />
                         </Form>
                     ) : (

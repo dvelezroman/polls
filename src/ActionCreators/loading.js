@@ -4,9 +4,14 @@ const working = () => ({
     type: LOADING.WORK
 });
 
-const rest = () => ({
-    type: LOADING.REST
-});
+const rest = (callback) => {
+    if (callback) {
+        callback();
+    }
+    return {
+        type: LOADING.REST
+    };
+}
 
 export const loading = {
     working,

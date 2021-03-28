@@ -1,15 +1,13 @@
-import { REGISTER } from '../ActionTypes';
+import { REGISTER, STORAGE } from '../ActionTypes';
 
 const INITIAL_STATE = [];
 
 const registerReducer = (state = INITIAL_STATE, action) => {
     switch (action.type) {
-        case REGISTER.SAVE_LOCAL_DATA:
+        case STORAGE.LOAD_DATA_TO_REDUCER:
             return action.payload;
         case REGISTER.DELETE_LOCAL_DATA:
             return [];
-        case REGISTER.GET_LOCAL_DATA:
-            return action.payload;
         default:
             return state;
     }

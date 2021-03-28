@@ -4,10 +4,20 @@ const canton = 'Tosagua';
 
 const parroquia = 'Tosagua';
 
-const recinto = 'U.E.F. Magdalena Davalos';
+const sexo = "Mujeres";
 
 const key = 'tosagua';
 
+const sexos = [
+    {
+        label: 'Mujeres',
+        value: 'Mujeres',
+    },
+    {
+        label: 'Hombres',
+        value: 'Hombres',
+    },
+]
 const parroquias = [
     { label: 'Tosagua', value: 'Tosagua' },
     { label: 'Bachillero', value: 'Bachillero' },
@@ -17,28 +27,28 @@ const parroquias = [
 
 const recintos = [
     {
-        label: 'U.E.F. Miguel Letamendi',
-        value: 'U.E.F. Miguel Letamendi',
+        label: 'UEF Miguel Letamendi',
+        value: 'UEF Miguel Letamendi',
         from: 'Bachillero'
     },
     {
-        label: 'U.E.F. Anibal Gonzales',
-        value: 'U.E.F. Anibal Gonzales',
+        label: 'UEF Anibal Gonzales',
+        value: 'UEF Anibal Gonzales',
         from: 'Estancilla'
     },
     {
-        label: 'U.E.F. Magdalena Davalos',
-        value: 'U.E.F. Magdalena Davalos',
+        label: 'UEF Magdalena Davalos',
+        value: 'UEF Magdalena Davalos',
         from: 'Tosagua'
     },
     {
-        label: 'U.E.F. Pedro Schumacher',
-        value: 'U.E.F. Pedro Schumacher',
+        label: 'UEF Pedro Schumacher',
+        value: 'UEF Pedro Schumacher',
         from: 'Tosagua'
     },
     {
-        label: 'U.E.F. Eugenio Espejo',
-        value: 'U.E.F. Eugenio Espejo',
+        label: 'UEF Eugenio Espejo',
+        value: 'UEF Eugenio Espejo',
         from: 'Tosagua'
     },
     {
@@ -69,6 +79,6 @@ export const tosagua = {
     profilePic,
     canton,
     parroquia,
-    recinto,
-    key
+    key,
+    sexos,
 };

@@ -1,6 +1,6 @@
 import { call, put } from 'redux-saga/effects';
 import { authentication, firebaseDataBase } from '../Store/Services/Firebase';
-import { error, loading } from '../ActionCreators';
+import { error, loading, user } from '../ActionCreators';
 
 const registerInFirebase = data =>
     authentication
@@ -32,6 +32,7 @@ export function* workerSignUp(values) {
                 email,
                 uid
             }); // stores the data of new user in firebase database
+            yield put(user.successRegister())
             yield put(error.clearError());
         } else {
             yield put(error.setError(registry));

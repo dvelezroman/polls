@@ -1,7 +1,7 @@
 import { call, put, select } from 'redux-saga/effects';
-import { AsyncStorage } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
 import { Toast } from 'native-base';
-import { register, error, loading } from '../ActionCreators';
+import { register, error, loading, storage } from '../ActionCreators';
 
 import { tosagua } from '../Components/Auths/Mock';
 const data = tosagua;
@@ -23,6 +23,7 @@ const _saveData = async registers => {
             msg: `Se guardó el registro`
         };
     } catch (err) {
+        console.log(err)
         Toast.show({
             text: 'No se pudo guardar el registro!',
             textStyle: { height: 50 },
@@ -44,11 +45,12 @@ const _fetchData = async () => {
         registers = JSON.parse(registers);
         return {
             error: false,
-            data: registers,
-            msg: `Recuperó ${registers.length} registros`
+            data: registers ? registers : [],
+            msg: `Recuperó ${registers ? registers.length : 0} registros`
         };
     } catch (err) {
         return {
+            err,
             error: true,
             data: [],
             msg: `No pudo recuperar los regitros`
@@ -77,9 +79,8 @@ export function* workerSaveToStorage(values) {
     try {
         yield put(loading.working());
         const registers = yield select(getRegisters);
-        registers.push(values.payload);
-        const saveResponse = yield call(_saveData, registers);
-        yield put(register.saveDataToLocalStorage(registers));
+        yield call(_saveData, [ ...registers, values.payload ]);
+        yield put(storage.loadDataToReducer([ ...registers, values.payload ]));
         yield put(loading.rest());
     } catch (err) {
         console.log(err);
@@ -89,8 +90,8 @@ export function* workerSaveToStorage(values) {
 export function* workerGetFromStorage() {
     try {
         yield put(loading.working());
-        const registers = yield call(_fetchData);
-        yield put(register.saveDataToLocalStorage(registers.data));
+        const response = yield call(_fetchData);
+        yield put(storage.loadDataToReducer(response.data));
         yield put(loading.rest());
     } catch (err) {
         console.log(err);

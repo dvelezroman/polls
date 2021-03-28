@@ -1,8 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import * as Font from 'expo-font'
-import { Ionicons } from '@expo/vector-icons';
-import { Container, Content, Text, Button, Spinner } from 'native-base';
+import { Container, Content, Text, Button, Spinner, Toast } from 'native-base';
 import { StyleSheet, KeyboardAvoidingView } from 'react-native';
 import SignUpForm from './Forms/SignUpForm';
 
@@ -10,17 +8,38 @@ import { user } from '../../ActionCreators/index';
 
 const mapStateToProps = state => ({
     error: state.errorReducer,
-    loading: state.loadingReducer
+    loading: state.loadingReducer,
+    userRegister: state.userRegisterReducer,
 });
 
 const mapDispatchToProps = dispatch => ({
-    signUp: values => dispatch(user.singUp(values))
+    signUp: values => dispatch(user.singUp(values)),
+    cleanSuccessRegister: () => dispatch(user.cleanSuccessRegister()),
 });
 
 class SignUp extends Component {
+    constructor() {
+        super();
+        this.state = {}
+    }
     userRegisterHandler = values => {
         this.props.signUp(values);
     };
+
+    static getDerivedStateFromProps(props) {
+        if (props.userRegister) {
+            Toast.show({
+                text: 'Usuario nuevo registrado!',
+                type: 'success',
+                duration: 2000,
+                onClose: () => {
+                    props.cleanSuccessRegister()
+                    props.navigation.navigate('SignIn');
+                }
+            });
+        }
+        return null
+    }
 
     render() {
         const { navigation } = this.props;

@@ -23,10 +23,20 @@ const unloadUser = () => ({
     type: USER.UNLOAD_USER
 });
 
+const successRegister = () => ({
+    type: USER.SUCCESS_REGISTER
+})
+
+const cleanSuccessRegister = () => ({
+    type: USER.CLEAN_SUCCESS_REGISTER
+})
+
 export const user = {
     signIn,
     signOut,
     singUp,
     loadUser,
-    unloadUser
+    unloadUser,
+    successRegister,
+    cleanSuccessRegister,
 };

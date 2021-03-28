@@ -1,16 +1,18 @@
-import { createStore, applyMiddleware } from 'redux';
-import reducers from '../Reducers/index';
-import watcher from '../Sagas/index';
+import { createStore, compose, applyMiddleware } from 'redux';
+import Reactotron from '../../ReactotronConfig';
+import RootReducer from '../Reducers/index';
+import Main from '../Sagas/index';
 import createSagaMiddleware from 'redux-saga';
 
-const sagaMiddleware = createSagaMiddleware();
+const sagaMonitor = Reactotron.createSagaMonitor();
+
+const sagaMiddleware = createSagaMiddleware({ sagaMonitor });
 
 const store = createStore(
-    reducers,
-    applyMiddleware(sagaMiddleware),
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+    RootReducer,
+    applyMiddleware(sagaMiddleware)
 );
 
-sagaMiddleware.run(watcher);
+sagaMiddleware.run(Main);
 
 export default store;

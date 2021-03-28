@@ -1,5 +1,5 @@
 import { call, put, select } from 'redux-saga/effects';
-import { firebaseStorage } from '../Store/Services/Firebase';
+import { firebaseDataBase } from '../Store/Services/Firebase';
 import { error, register } from '../ActionCreators';
 import { Toast } from 'native-base';
 
@@ -7,14 +7,21 @@ import { tosagua } from '../Components/Auths/Mock';
 
 const data = tosagua;
 
-const _upload = async (registers, userName) => {
+const _upload = async (registers) => {
     try {
-        registers = JSON.stringify(registers);
-        const blob = new Blob([registers], { type: 'text/plain' });
-        const ref = firebaseStorage.ref(
-            `/actas/${data.key}/${userName}/registros`
-        );
-        const response = await ref.put(blob);
+        // registers = JSON.stringify(registers);
+        // const blob = new Blob([registers], { type: 'text/plain' });
+        // const ref = firebaseStorage.ref(
+        //     `/actas/${data.key}/${userName}/registros`
+        // );
+        const regex = /./g;
+        registers.forEach(reg => {
+            const recinto = reg.recinto.split(' ').join('_');
+            console.log({ verga: reg.recinto, recinto });
+            firebaseDataBase.ref(`actas/Tosagua/${reg.parroquia}/${recinto}/${reg.mesa}/${reg.sexo}`).set(reg);
+        })
+        
+        // const response = await ref.put(blob);
         Toast.show({
             text: 'Se subieron los registros...',
             textStyle: { height: 50 },
@@ -26,6 +33,7 @@ const _upload = async (registers, userName) => {
             msg: 'Se subieron los registros...'
         };
     } catch (err) {
+        console.log(err)
         Toast.show({
             text: 'No se subieron los registros',
             textStyle: { height: 50 },
@@ -45,8 +53,7 @@ const getUserName = state => state.userReducer.username;
 export function* workerUploadToFirebase() {
     try {
         const registers = yield select(getRegisters);
-        const userName = yield select(getUserName);
-        const response = yield call(_upload, registers, userName);
+        const response = yield call(_upload, registers);
         if (!response.error) {
             //yield put(register._clearStorage());
         }

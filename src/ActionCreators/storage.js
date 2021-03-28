@@ -13,8 +13,14 @@ const clearStorage = () => ({
     type: STORAGE.CLEAR_STORAGE
 });
 
+const loadDataToReducer = (values) => ({
+    type: STORAGE.LOAD_DATA_TO_REDUCER,
+    payload: values,
+})
+
 export const storage = {
     saveToStorage,
     getFromStorage,
-    clearStorage
+    clearStorage,
+    loadDataToReducer,
 };
