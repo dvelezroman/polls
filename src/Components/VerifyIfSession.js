@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import { StyleSheet, AsyncStorage } from 'react-native';
+import AsyncStorage from '@react-native-community/async-storage';
+import { StyleSheet } from 'react-native';
 import { user } from '../ActionCreators';
 import AuthsStack from './Auths/AuthsStack';
 import NoAuthsStack from './NoAuths/NoAuthsStack';

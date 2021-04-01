@@ -1,6 +1,5 @@
-import { call, put, select } from 'redux-saga/effects';
+import { call, select } from 'redux-saga/effects';
 import { firebaseDataBase } from '../Store/Services/Firebase';
-import { error, register } from '../ActionCreators';
 import { Toast } from 'native-base';
 
 import { tosagua } from '../Components/Auths/Mock';
@@ -9,18 +8,12 @@ const data = tosagua;
 
 const _upload = async (registers) => {
     try {
-        // registers = JSON.stringify(registers);
-        // const blob = new Blob([registers], { type: 'text/plain' });
-        // const ref = firebaseStorage.ref(
-        //     `/actas/${data.key}/${userName}/registros`
-        // );
-        const regex = /./g;
-        registers.forEach(reg => {
+        const regProms = registers.map(reg => {
             const recinto = reg.recinto.split(' ').join('_');
-            firebaseDataBase.ref(`actas/Tosagua/${reg.parroquia}/${recinto}/${reg.mesa}/${reg.sexo}`).set(reg);
+            return firebaseDataBase.ref(`actas/Tosagua/${reg.parroquia}/${recinto}/${reg.mesa}/${reg.sexo}`).set(reg);
         })
+        await Promise.all(regProms);
         
-        // const response = await ref.put(blob);
         Toast.show({
             text: 'Se subieron los registros...',
             textStyle: { height: 50 },

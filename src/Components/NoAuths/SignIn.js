@@ -11,6 +11,7 @@ import {
     Body,
     Left,
     Thumbnail,
+    Toast,
     View
 } from 'native-base';
 import { StyleSheet } from 'react-native';
@@ -45,7 +46,11 @@ const validate = values => {
     } else if (values.password.length > 15) {
         errors.password = 'contraseña muy larga';
     }
-    return errors;
+    
+    if (Object.keys(errors).length) {
+        return errors;
+    }
+    return null;
 };
 class SignIn extends Component {
     constructor(props) {
