@@ -1,5 +1,5 @@
 import { call, put } from 'redux-saga/effects';
-import { AsyncStorage } from 'react-native';
+import { AsyncStorage } from '@react-native-community/async-storage';
 import { Toast } from 'native-base';
 import { authentication, firebaseDataBase } from '../Store/Services/Firebase';
 import { user, error, loading } from '../ActionCreators';

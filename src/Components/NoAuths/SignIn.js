@@ -1,8 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import * as Font from 'expo-font'
-import { Ionicons } from '@expo/vector-icons';
-import { KeyboardAvoidingView } from 'react-native';
+
 import {
     Container,
     Content,
@@ -20,7 +18,6 @@ import SignInForm from './Forms/SignInForm';
 import { user } from '../../ActionCreators';
 
 const mapStateToProps = state => ({
-    form: state.form,
     error: state.errorReducer,
     logged: state.userReducer,
     loading: state.loadingReducer
@@ -30,19 +27,63 @@ const mapDispatchToProps = dispatch => ({
     signIn: values => dispatch(user.signIn(values))
 });
 
+const validate = values => {
+    const errors = {};
+
+    if (!values.email) {
+        errors.email = 'requerido';
+    } else if (
+        !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
+    ) {
+        errors.email = 'correo inválido';
+    }
+
+    if (!values.password) {
+        errors.password = 'requerido';
+    } else if (values.password.length < 5) {
+        errors.password = 'contraseña muy corta';
+    } else if (values.password.length > 15) {
+        errors.password = 'contraseña muy larga';
+    }
+    return errors;
+};
 class SignIn extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            user: {
+                email: "",
+                password: "",
+            }
+        }
+    };
+
     isCancelled = false;
 
-    userSignInHandler = values => {
-        this.props.signIn(values);
+    userSignInHandler = () => {
+        if (validate(this.state.user)) {
+            Toast.show({
+                text: 'Formulario con errores...!',
+                type: 'warning',
+                duration: 2000,
+            });
+        } else {
+            this.props.signIn(this.state.user);
+        }
     };
 
     componentWillUnmount() {
         this.isCancelled = true; // esto cancela el setState en caso de que exista una sesión iniciada
     }
 
+    onChange = (name, value) => {
+        const { user } = this.state;
+        user[name] = value;
+        this.setState({ user })
+    }
+
     render = () => {
-        const { navigation, error, logged } = this.props;
+        const { navigation, form } = this.props;
         return (
             <Container>
                 <Content contentContainerStyle={styles.container}>
@@ -57,9 +98,10 @@ class SignIn extends Component {
                                 Ingresar
                             </Text>
                             <SignInForm
+                                onChange={this.onChange}
+                                user={this.state.user}
                                 userSignInHandler={this.userSignInHandler}
                             />
-
                             <Button
                                 style={{ alignSelf: 'center' }}
                                 transparent
@@ -79,14 +121,14 @@ class SignIn extends Component {
                         >
                             <Text
                                 style={{
-                                    fontSize: 12,
+                                    fontSize: 10,
                                     alignSelf: 'center',
                                     fontFamily: 'Roboto',
                                     fontStyle: 'italic',
-                                    color: 'white'
+                                    color: 'blue'
                                 }}
                             >
-                                Versión: 20190320
+                                Versión: 20210401
                             </Text>
                             <Text
                                 style={{
@@ -94,7 +136,7 @@ class SignIn extends Component {
                                     alignSelf: 'center',
                                     fontFamily: 'Roboto',
                                     fontStyle: 'italic',
-                                    color: 'white'
+                                    color: 'blue'
                                 }}
                             >
                                 CaffeinaSW, software factory.

@@ -1,72 +1,26 @@
 import React, { Fragment } from 'react';
 import { Button, Item, Input, Text } from 'native-base';
 import { StyleSheet } from 'react-native';
-import { Field, reduxForm } from 'redux-form';
 
-const fieldName = props => {
+const Field = props => {
     return (
         <Item>
             <Input
                 style={styles.textInput}
                 placeholder={props.placeholder}
-                value={props.input.value}
                 textContentType={props.type}
                 keyboardType={
-                    props.input.name === 'email' ? 'email-address' : 'default'
+                    props.name === 'email' ? 'email-address' : 'default'
                 }
-                onChangeText={props.input.onChange}
+                onChangeText={props.onChange}
                 autoCapitalize="none"
-                onBlur={props.input.onBlur}
                 secureTextEntry={
-                    props.input.name === 'password' ||
-                    props.input.name === 'conf_password'
+                    props.name === 'password' ||
+                    props.name === 'conf_password'
                 }
             />
-            {props.meta.touched && props.meta.error && (
-                <Text style={styles.error}>{props.meta.error}</Text>
-            )}
         </Item>
     );
-};
-
-const validate = (values, props) => {
-    const errors = {};
-
-    if (!props.image) {
-        errors.image = 'requerido';
-    }
-
-    if (!values.name) {
-        errors.name = 'requerido';
-    } else if (values.name.length < 5) {
-        errors.name = 'Nombre muy corto';
-    } else if (values.name.length > 10) {
-        errors.name = 'Nombre muy largo';
-    }
-
-    if (!values.email) {
-        errors.email = 'requerido';
-    } else if (
-        !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
-    ) {
-        errors.email = 'direccion de correo inválido';
-    }
-
-    if (!values.password) {
-        errors.password = 'requerido';
-    } else if (values.password.length < 5) {
-        errors.password = 'password muy corta';
-    } else if (values.password.length > 15) {
-        errors.password = 'password muy larga';
-    }
-
-    if (!values.conf_password) {
-        errors.conf_password = 'requerido';
-    } else if (values.conf_password !== values.password) {
-        errors.conf_password = 'contraseña no coincide';
-    }
-
-    return errors;
 };
 
 const SignUpForm = props => {
@@ -74,32 +28,36 @@ const SignUpForm = props => {
         <Fragment>
             <Field
                 name="name"
-                component={fieldName}
+                value={props.user.name}
+                onChange={(value) => props.onChange('name', value)}
                 placeholder="nombre"
                 type="username"
             />
             <Field
                 name="email"
-                component={fieldName}
+                value={props.user.email}
+                onChange={(value) => props.onChange('email', value)}
                 placeholder="correo electrónico"
                 type="emailAddress"
             />
             <Field
                 name="password"
-                component={fieldName}
+                value={props.user.password}
+                onChange={(value) => props.onChange('password', value)}
                 placeholder="ingrese una contraseña"
                 type="password"
             />
             <Field
                 name="conf_password"
-                component={fieldName}
+                value={props.user.conf_password}
+                onChange={(value) => props.onChange('conf_password', value)}
                 placeholder="confirme contraseña"
                 type="password"
             />
             <Button
                 style={{ marginVertical: 20 }}
                 full
-                onPress={props.handleSubmit(props.userRegisterHandler)}
+                onPress={props.userRegisterHandler}
             >
                 <Text>Registrar</Text>
             </Button>
@@ -121,4 +79,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default reduxForm({ form: 'SignUpForm', validate })(SignUpForm);
+export default SignUpForm;

@@ -6,6 +6,45 @@ import SignUpForm from './Forms/SignUpForm';
 
 import { user } from '../../ActionCreators/index';
 
+const validate = (values) => {
+    const errors = {};
+
+    if (!values.name) {
+        errors.name = 'requerido';
+    } else if (values.name.length < 5) {
+        errors.name = 'Nombre muy corto';
+    } else if (values.name.length > 10) {
+        errors.name = 'Nombre muy largo';
+    }
+
+    if (!values.email) {
+        errors.email = 'requerido';
+    } else if (
+        !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
+    ) {
+        errors.email = 'direccion de correo inválido';
+    }
+
+    if (!values.password) {
+        errors.password = 'requerido';
+    } else if (values.password.length < 5) {
+        errors.password = 'password muy corta';
+    } else if (values.password.length > 15) {
+        errors.password = 'password muy larga';
+    }
+
+    if (!values.conf_password) {
+        errors.conf_password = 'requerido';
+    } else if (values.conf_password !== values.password) {
+        errors.conf_password = 'contraseña no coincide';
+    }
+
+    if (Object.keys(errors).length) {
+        return errors;
+    }
+    return null;
+};
+
 const mapStateToProps = state => ({
     error: state.errorReducer,
     loading: state.loadingReducer,
@@ -20,10 +59,26 @@ const mapDispatchToProps = dispatch => ({
 class SignUp extends Component {
     constructor() {
         super();
-        this.state = {}
+        this.state = {
+            user: {
+                name: "",
+                email: "",
+                password: "",
+                conf_password: "",
+            }
+        }
     }
-    userRegisterHandler = values => {
-        this.props.signUp(values);
+
+    userRegisterHandler = () => {
+        if (validate(this.state.user)) {
+            Toast.show({
+                text: 'Formulario con errores...!',
+                type: 'warning',
+                duration: 2000,
+            });
+        } else {
+            this.props.signUp(this.state.user);
+        }
     };
 
     static getDerivedStateFromProps(props) {
@@ -39,6 +94,12 @@ class SignUp extends Component {
             });
         }
         return null
+    }
+
+    onChange = (name, value) => {
+        const { user } = this.state;
+        user[name] = value;
+        this.setState({ user })
     }
 
     render() {
@@ -58,6 +119,8 @@ class SignUp extends Component {
                                     Registrar Nuevo Usuario
                                 </Text>
                                 <SignUpForm
+                                    user={this.state.user}
+                                    onChange={this.onChange}
                                     userRegisterHandler={
                                         this.userRegisterHandler
                                     }

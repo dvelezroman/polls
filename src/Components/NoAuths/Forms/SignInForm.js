@@ -1,64 +1,45 @@
 import React, { Fragment } from 'react';
 import { Button, Item, Input, Text } from 'native-base';
 import { StyleSheet } from 'react-native';
-import { Field, reduxForm } from 'redux-form';
+// import { Field, reduxForm } from 'redux-form';
 
-const fieldName = props => {
+const Field = props => {
     return (
         <Item>
             <Input
                 style={styles.textInput}
                 placeholder={props.placeholder}
-                value={props.input.value}
+                value={props.value}
                 keyboardType={
-                    props.input.name === 'email' ? 'email-address' : 'default'
+                    props.name === 'email' ? 'email-address' : 'default'
                 }
-                onChangeText={props.input.onChange}
+                onChangeText={props.onChange}
                 autoCapitalize="none"
-                onBlur={props.input.onBlur}
-                secureTextEntry={props.input.name === 'password'}
+                secureTextEntry={props.name === 'password'}
             />
-            {props.meta.touched && props.meta.error && (
-                <Text style={styles.error}>{props.meta.error}</Text>
-            )}
         </Item>
     );
-};
-
-const validate = values => {
-    const errors = {};
-
-    if (!values.email) {
-        errors.email = 'requerido';
-    } else if (
-        !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
-    ) {
-        errors.email = 'correo inválido';
-    }
-
-    if (!values.password) {
-        errors.password = 'requerido';
-    } else if (values.password.length < 5) {
-        errors.password = 'contraseña muy corta';
-    } else if (values.password.length > 15) {
-        errors.password = 'contraseña muy larga';
-    }
-    return errors;
 };
 
 const SignInForm = props => {
     return (
         <Fragment>
-            <Field name="email" component={fieldName} placeholder="correo" />
+            <Field
+                name="email"
+                value={props.user.email}
+                onChange={value => props.onChange('email', value)}
+                placeholder="correo"
+            />
             <Field
                 name="password"
-                component={fieldName}
+                value={props.user.password}
+                onChange={(value) => props.onChange('password', value)}
                 placeholder="contraseña"
             />
             <Button
                 style={{ marginVertical: 20 }}
                 full
-                onPress={props.handleSubmit(props.userSignInHandler)}
+                onPress={() => props.userSignInHandler()}
             >
                 <Text>Ingresar</Text>
             </Button>
@@ -80,4 +61,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default reduxForm({ form: 'SignInForm', validate })(SignInForm);
+export default SignInForm;
