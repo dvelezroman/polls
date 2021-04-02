@@ -74,7 +74,11 @@ const _clearStorage = async () => {
 };
 
 const getRegisterFromStorage = (registers, reg) => {
-    return find(registers, (item) => item.sexo === reg.sexo && item.mesa === reg.mesa);
+    return find(registers, (item) => item.parroquia === reg.parroquia && 
+        item.junta === reg.junta &&
+        item.sexo === reg.sexo &&
+        item.mesa === reg.mesa
+    );
 }
 
 const getRegisters = state => state.registerReducer;
