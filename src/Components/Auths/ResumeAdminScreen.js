@@ -17,6 +17,7 @@ import {
   Left,
   Footer,
   Picker,
+  Content,
 } from 'native-base';
 
 import RegisterList from './RegisterList';
@@ -44,13 +45,13 @@ class ResumeAdminScreen extends Component {
   }
 
   onRefresh = () => {
-    this.setState({ refreshing: true })
+    this.setState({ refreshing: true, parroquia: "Todas" })
     this.getRegistersFromFirebase();
   }
 
   onSelect = (name, value) => {
     if (value === 'Todas') {
-      this.setState({ [name]: value, filteredRegisters: [ ...this.state.registers ] })
+      this.setState({ [name]: value, filteredRegisters: [...this.state.registers] })
     } else {
       const filteredRegisters = this.state.registers.filter(reg => reg.parroquia === value);
       this.setState({ [name]: value, filteredRegisters });
@@ -110,51 +111,52 @@ class ResumeAdminScreen extends Component {
             </Badge>
           </Right>
         </Header>
-        <Subtitle
-          style={{ marginTop: 10, fontSize: 14, alignSelf: 'center' }}
-        >
-          Filtro por Parroquias
+        <Content>
+          <Subtitle
+            style={{ marginTop: 10, fontSize: 14, alignSelf: 'center', color: 'gray' }}
+          >
+            Filtro por Parroquias
         </Subtitle>
-        <Picker
-          style={{ flex: 1 }}
-          mode="dropdown"
-          iosIcon={<Icon name="arrow-down" />}
-          style={{ width: '100%' }}
-          placeholderIconColor="#007aff"
-          selectedValue={this.state.parroquia}
-          onValueChange={value => this.onSelect('parroquia', value)}
-        >
-          {[{ label: "Todas", value: "Todas" }, ...data.parroquias].map((item, i) => (
-            <Picker.Item
-              key={i}
-              label={item.label}
-              value={item.value}
+          <Picker
+            mode="dropdown"
+            iosIcon={<Icon name="arrow-down" />}
+            style={{ flex: 1, width: '100%', height: 40 }}
+            placeholderIconColor="#007aff"
+            selectedValue={this.state.parroquia}
+            onValueChange={value => this.onSelect('parroquia', value)}
+          >
+            {[{ label: "Todas", value: "Todas" }, ...data.parroquias].map((item, i) => (
+              <Picker.Item
+                key={i}
+                label={item.label}
+                value={item.value}
+              />
+            ))}
+          </Picker>
+          <Subtitle
+            style={{ marginTop: 10, fontSize: 14, alignSelf: 'center', color: 'gray' }}
+          >
+            Lista de Resultados
+        </Subtitle>
+          {!this.props.loading ? (
+            <RegisterList
+              regs={filteredRegisters}
+              visible={user.admin}
+              from="AdminScreen"
+              onRefresh={this.onRefresh}
+              refreshing={refreshing}
             />
-          ))}
-        </Picker>
-        <Subtitle
-          style={{ marginTop: 10, fontSize: 14, alignSelf: 'center' }}
-        >
-          Lista de Resultados
-        </Subtitle>
-        {!this.props.loading ? (
-          <RegisterList
-            regs={filteredRegisters}
-            visible={user.admin}
-            from="AdminScreen"
-            onRefresh={this.onRefresh}
-            refreshing={refreshing}
-          />
-        ) : (
-          <Spinner
-            visible={this.props.loading}
-            animation="fade"
-            cancelable={false}
-            textContent={'Cargando...'}
-            textStyle={{ color: 'blue' }}
-          />
-        )
-        }
+          ) : (
+            <Spinner
+              visible={this.props.loading}
+              animation="fade"
+              cancelable={false}
+              textContent={'Cargando...'}
+              textStyle={{ color: 'blue' }}
+            />
+          )
+          }
+        </Content>
         <Footer style={{ paddingHorizontal: 10, paddingTop: 20 }}>
           <Left style={{ flex: 1 }}>
             <Text style={{ color: 'black' }}>Totales: </Text>

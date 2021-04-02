@@ -11,7 +11,7 @@ const pickerName = props => {
                 style={{ flex: 1 }}
                 mode="dropdown"
                 iosIcon={<Icon name="arrow-down" />}
-                style={{ width: undefined }}
+                style={{ height: 50 }}
                 placeholderIconColor="#007aff"
                 selectedValue={props.selected}
                 onValueChange={value => props.onSelect({ name: input, value })}

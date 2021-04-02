@@ -21,7 +21,6 @@ export default RegisterList = ({ regs, visible, from, onRefresh, refreshing }) =
     <ListItem>
       <Left
         style={{
-          flex: 2,
           flexDirection: 'column'
         }}
       >
