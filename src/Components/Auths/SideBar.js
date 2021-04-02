@@ -35,12 +35,6 @@ class SideBar extends React.Component {
         }
     }
 
-    componentDidMount() {
-        if (this.props.user.admin) {
-            this.props.navigation.navigate('Todo');
-        }
-    }
-
     render() {
         return (
             <View style={{ flex: 1, backgroundColor: 'black' }}>
