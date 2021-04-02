@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import { Button, Icon, Item, Input, Text, Label, Picker, View } from 'native-base';
 import { StyleSheet, KeyboardAvoidingView } from 'react-native';
 import { Field, reduxForm } from 'redux-form';

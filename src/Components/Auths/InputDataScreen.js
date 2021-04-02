@@ -2,8 +2,6 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import filter from 'lodash/filter';
 import Spinner from 'react-native-loading-spinner-overlay';
-import * as Font from 'expo-font'
-import { Ionicons } from '@expo/vector-icons';
 import {
     Container,
     Badge,
@@ -89,7 +87,7 @@ class InputDataScreen extends Component {
         const {
             provincia,
             canton,
-            parroquia, 
+            parroquia,
             recinto,
             sexo,
         } = this.state
@@ -136,7 +134,7 @@ class InputDataScreen extends Component {
 
     render = () => {
         return (
-            <Container style={{ backgroundColor: 'black' }}>
+            <Container style={{ backgroundColor: 'white' }}>
                 <Header
                     style={{
                         marginTop: 25
@@ -176,10 +174,10 @@ class InputDataScreen extends Component {
                         </Badge>
                     </Right>
                 </Header>
-
-                <Content style={{ backgroundColor: '#F0F0F0' }}>
-                    {!this.props.loading ? (
-                        <Form style={{ paddingHorizontal: 20 }}>
+                {!this.props.loading ? (
+                    <Content
+                    >
+                        <Form style={{ paddingHorizontal: 10 }}>
                             <InputDataForm
                                 parroquia={this.state.parroquia}
                                 recinto={this.state.recinto || "Seleccione"}
@@ -191,16 +189,16 @@ class InputDataScreen extends Component {
                                 onSubmit={this.registerDataHandler}
                             />
                         </Form>
-                    ) : (
-                        <Spinner
-                            visible={this.props.loading}
-                            animation="fade"
-                            cancelable={false}
-                            textContent={this.state.msg}
-                            textStyle={{ color: 'blue' }}
-                        />
-                    )}
-                </Content>
+                    </Content>
+                ) : (
+                    <Spinner
+                        visible={this.props.loading}
+                        animation="fade"
+                        cancelable={false}
+                        textContent={this.state.msg}
+                        textStyle={{ color: 'blue' }}
+                    />
+                )}
             </Container>
         );
     };

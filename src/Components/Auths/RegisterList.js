@@ -1,13 +1,22 @@
-import React from 'react'
+import React, { useCallback, useState } from 'react'
+import { RefreshControl } from 'react-native'
 import {
   Body,
   List,
   ListItem,
   Text,
+  Title,
   Left,
 } from 'native-base';
 
-export default RegisterList = ({ regs }) => {
+export default RegisterList = ({ regs, visible, from, onRefresh, refreshing }) => {
+  const renderNoVisible = () =>
+    <Title
+      style={{ fontSize: 20, alignSelf: 'center' }}
+    >
+      Su perfil de usuario no permite visualizar esta información.
+      </Title>
+
   const renderItems = (reg, index) =>
     <ListItem>
       <Left
@@ -42,8 +51,19 @@ export default RegisterList = ({ regs }) => {
       </Right> */}
     </ListItem>
 
+  if (from === "AdminScreen") {
+    if (!visible) {
+      return renderNoVisible()
+    }
+  }
+
   return (
     <List
+      refreshControl={<RefreshControl
+        refreshing={refreshing}
+        onRefresh={onRefresh}
+      />}
+      style={{ backgroundColor: 'white' }}
       dataArray={regs}
       keyExtractor={(data, index) => index.toString()}
       renderRow={(value, index) => renderItems(value, index)}

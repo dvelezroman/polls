@@ -7,7 +7,7 @@ import {
     workerGetFromStorage,
     workerClearStorage
 } from './register';
-import { workerUploadToFirebase } from './loadToFirebase';
+import { workerGetFromFirebase, workerUploadToFirebase } from './loadToFirebase';
 
 export default function* watcher() {
     // listen and catch events
@@ -18,6 +18,7 @@ export default function* watcher() {
     yield takeEvery(STORAGE.GET_FROM_STORAGE, workerGetFromStorage);
     yield takeEvery(STORAGE.CLEAR_STORAGE, workerClearStorage);
     yield takeEvery(FIREBASE.UPLOAD, workerUploadToFirebase);
+    yield takeEvery(FIREBASE.GET_FROM_FIREBASE, workerGetFromFirebase);
 }
 
 // TODO : una vez que se loggea , guardar localmente una sesion del usuario

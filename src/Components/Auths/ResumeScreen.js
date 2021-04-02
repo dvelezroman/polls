@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import sumBy from 'lodash/sumBy';
 import Spinner from 'react-native-loading-spinner-overlay';
 
 import {
@@ -22,11 +21,13 @@ import {
 import { loading, storage, firebase } from '../../ActionCreators';
 import RegisterList from './RegisterList';
 import { View } from 'react-native';
+import { firebaseDataBase } from '../../Store/Services/Firebase';
 
 const mapStateToProps = state => ({
     logged: state.userReducer,
     regs: state.registerReducer,
-    loading: state.loadingReducer
+    loading: state.loadingReducer,
+    user: state.userReducer,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -37,12 +38,31 @@ const mapDispatchToProps = dispatch => ({
 });
 
 class ResumeScreen extends Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            registers: [],
+        }
+    }
+
+    getRegistersFromFirebase = () => {
+        const ref = firebaseDataBase.ref('actas/Tosagua');
+        ref.on('value', (snapshot) => {
+            const registers = snapshot.val();
+            this.setState({ registers })
+        });
+    }
+
     async upload() {
         await this.props.upload();
     }
 
+    componentDidMount() {
+        this.getRegistersFromFirebase();
+    }
+
     render = () => {
-        const { regs } = this.props;
+        const { regs, user } = this.props;
         return (
             <Container style={{ backgroundColor: 'black' }}>
                 <Header
@@ -62,12 +82,12 @@ class ResumeScreen extends Component {
                         <Title
                             style={{ fontSize: 20, alignSelf: 'center' }}
                         >
-                            Resumen
+                            Registro
                             </Title>
                         <Subtitle
                             style={{ fontSize: 14, alignSelf: 'center' }}
                         >
-                            de votos
+                            de Juntas Ingresadas
                             </Subtitle>
                     </Body>
                     <Right style={{ alignSelf: 'center', flex: 1 }}>

@@ -1,5 +1,7 @@
 const UPLOAD = 'UPLOAD';
+const GET_FROM_FIREBASE = 'GET_FROM_FIREBASE';
 
 export const FIREBASE = {
-    UPLOAD
+    UPLOAD,
+    GET_FROM_FIREBASE,
 };

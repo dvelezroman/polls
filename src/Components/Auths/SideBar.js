@@ -1,22 +1,46 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { AppRegistry, Image, StatusBar } from 'react-native';
+import { Image } from 'react-native';
 import { Text, List, Left, Body, ListItem, Icon, View } from 'native-base';
 import { user } from '../../ActionCreators';
 
 import { tosagua } from './Mock';
 const data = tosagua;
 
-const routes = [
-    { to: 'Registrar', icon: 'home' },
-    { to: 'Resumen', icon: 'calculator' }
-];
+const mapStateToProps = state => ({
+    regs: state.registerReducer,
+    loading: state.loadingReducer,
+    user: state.userReducer,
+});
 
 const mapDispatchToProps = dispatch => ({
     logOut: () => dispatch(user.signOut())
 });
 
 class SideBar extends React.Component {
+    getRoutes = () => {
+        const { user } = this.props;
+
+        if (user.admin) {
+            return [
+                { to: 'Registrar', icon: 'home' },
+                { to: 'Resumen', icon: 'calculator' },
+                { to: 'Todo', icon: 'calculator' },
+            ]
+        } else {
+            return [
+                { to: 'Registrar', icon: 'home' },
+                { to: 'Resumen', icon: 'calculator' },
+            ]
+        }
+    }
+
+    componentDidMount() {
+        if (this.props.user.admin) {
+            this.props.navigation.navigate('Todo');
+        }
+    }
+
     render() {
         return (
             <View style={{ flex: 1, backgroundColor: 'black' }}>
@@ -34,7 +58,7 @@ class SideBar extends React.Component {
                 </View>
                 <View style={{ flex: 5, backgroundColor: '#F0F0F0' }}>
                     <List
-                        dataArray={routes}
+                        dataArray={this.getRoutes()}
                         contentContainerStyle={{}}
                         keyExtractor={(data, index) => index.toString()}
                         renderRow={(data) => {
@@ -76,6 +100,6 @@ class SideBar extends React.Component {
 }
 
 export default connect(
-    null,
+    mapStateToProps,
     mapDispatchToProps
 )(SideBar);

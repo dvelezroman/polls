@@ -2,7 +2,7 @@ import { call, put } from 'redux-saga/effects';
 import AsyncStorage from '@react-native-community/async-storage';
 import { Toast } from 'native-base';
 import { authentication, firebaseDataBase } from '../Store/Services/Firebase';
-import { user, error, loading } from '../ActionCreators';
+import { user, error, loading, firebase } from '../ActionCreators';
 
 const signInFirebase = data =>
     authentication
@@ -45,6 +45,7 @@ export function* workerSignIn(values) {
             const dataUser = yield call(getUser, uid);
             yield call(_storeData, dataUser);
             yield put(user.loadUser(dataUser));
+            // yield put(firebase.getFromFirebase());
         } else {
             Toast.show({
                 text: 'Usuario o Contraseña Inválida',

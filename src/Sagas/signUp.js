@@ -15,8 +15,8 @@ const registerInFirebase = data =>
             data: error
         }));
 
-const registerInDataBase = ({ uid, username, email }) =>
-    firebaseDataBase.ref(`users/${uid}`).set({ username, email });
+const registerInDataBase = ({ uid, username, email, admin }) =>
+    firebaseDataBase.ref(`users/${uid}`).set({ username, email, admin });
 
 export function* workerSignUp(values) {
     try {
@@ -30,7 +30,8 @@ export function* workerSignUp(values) {
             yield call(registerInDataBase, {
                 username: name,
                 email,
-                uid
+                uid,
+                admin: false,
             }); // stores the data of new user in firebase database
             yield put(user.successRegister())
             yield put(error.clearError());

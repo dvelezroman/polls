@@ -1,9 +1,10 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { createAppContainer } from 'react-navigation';
 import { createDrawerNavigator } from 'react-navigation-drawer';
 import InputDataScreen from './InputDataScreen';
 import SideBar from './SideBar';
 import ResumeScreen from './ResumeScreen';
+import ResumeAdminScreen from './ResumeAdminScreen';
 
 const MyDrawerNavigator = createDrawerNavigator(
     {
@@ -12,6 +13,9 @@ const MyDrawerNavigator = createDrawerNavigator(
         },
         Resumen: {
             screen: ResumeScreen
+        },
+        Todo: {
+            screen: ResumeAdminScreen
         }
     },
     {
