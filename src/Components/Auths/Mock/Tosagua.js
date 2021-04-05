@@ -22,54 +22,63 @@ const parroquias = [
     { label: 'Tosagua', value: 'Tosagua' },
     { label: 'Bachillero', value: 'Bachillero' },
     { label: 'Angel Pedro Giler, Estancilla', value: 'Estancilla' },
-    { label: 'Rural', value: 'Rural' }
 ];
 
 const recintos = [
     {
-        label: 'UEF Miguel Letamendi',
-        value: 'UEF Miguel Letamendi',
+        label: 'Miguel De Letamendi',
+        value: 'Miguel De Letamendi',
         from: 'Bachillero'
     },
     {
-        label: 'UEF Anibal Gonzales',
-        value: 'UEF Anibal Gonzales',
+        label: 'Anibal Gonzales Alava',
+        value: 'Anibal Gonzales Alava',
         from: 'Estancilla'
     },
     {
-        label: 'UEF Magdalena Davalos',
-        value: 'UEF Magdalena Davalos',
+        label: 'Magdalena Davalos',
+        value: 'Magdalena Davalos',
         from: 'Tosagua'
     },
     {
-        label: 'UEF Pedro Schumacher',
-        value: 'UEF Pedro Schumacher',
+        label: 'Pedro Schumacher',
+        value: 'Pedro Schumacher',
         from: 'Tosagua'
     },
     {
-        label: 'UEF Eugenio Espejo',
-        value: 'UEF Eugenio Espejo',
+        label: 'Eugenio Espejo',
+        value: 'Eugenio Espejo',
         from: 'Tosagua'
     },
     {
-        label: 'El Tambo',
-        value: 'El Tambo',
-        from: 'Rural'
+        label: 'Carlos Julio Arosemena Tola',
+        value: 'Carlos Julio Arosemena Tola',
+        from: 'Tosagua'
     },
     {
-        label: 'El Junco',
-        value: 'El Junco',
-        from: 'Rural'
+        label: 'Jose Vicente Luque',
+        value: 'Jose Vicente Luque',
+        from: 'Tosagua'
     },
     {
-        label: 'Cerro Verde',
-        value: 'Cerro Verde',
-        from: 'Rural'
+        label: 'Maria Teresa Teron de Castro',
+        value: 'Maria Teresa Teron de Castro',
+        from: 'Tosagua'
     },
     {
-        label: 'La Botija',
-        value: 'La Botija',
-        from: 'Rural'
+        label: 'Jacinto Santos Verduga',
+        value: 'Jacinto Santos Verduga',
+        from: 'Tosagua'
+    },
+    {
+        label: 'Gabriela Mero 24 de Mayo',
+        value: 'Gabriela Mero 24 de Mayo',
+        from: 'Tosagua'
+    },
+    {
+        label: 'Jose Maria Huerta',
+        value: 'Jose Maria Huerta',
+        from: 'Tosagua'
     }
 ];
 
