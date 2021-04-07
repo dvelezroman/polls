@@ -24,11 +24,14 @@ export default RegisterList = ({ regs, visible, from, onRefresh, refreshing, rem
     <ListItem>
       <Left
         style={{
-          flexDirection: 'column'
+          flexDirection: 'column',
+          backgroundColor: reg.sexo === 'Mujeres' ? 'pink' : 'gray',
+          borderRadius: 10,
+          padding: 5,
         }}
       >
         <Text
-          style={{ fontSize: 24 }}
+          style={{ fontSize: 20 }}
         >{`${reg.mesa} - ${reg.sexo[0]}`}</Text>
       </Left>
       <Body style={{ flex: 5 }}>
@@ -48,15 +51,15 @@ export default RegisterList = ({ regs, visible, from, onRefresh, refreshing, rem
         >{`Blancos: ${reg.blancos
           } -- Nulos: ${reg.nulos}`}</Text>
       </Body>
-      <Right style={{ flex: 1 }}>
+      {!visible && <Right style={{ flex: 1 }}>
         <Button
           onPress={() => removeItem(reg)}
           rounded
-          style={{ flex: 1, backgroundColor: 'red' }}
+          style={{ backgroundColor: 'white' }}
         >
-          <Icon name="trash-outline" />
+          <Icon name="trash-outline" style={{ fontSize: 18, color: 'red' }} />
         </Button>
-      </Right>
+      </Right>}
     </ListItem>
 
   if (from === "AdminScreen") {

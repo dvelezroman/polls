@@ -156,18 +156,16 @@ class ResumeAdminScreen extends Component {
           )
           }
         </Content>
-        <Footer style={{ paddingHorizontal: 10, paddingTop: 20 }}>
+        <Footer style={{ paddingHorizontal: 10, paddingTop: 20, paddingBottom: 20 }}>
           <Left style={{ flex: 1 }}>
-            <Text style={{ color: 'black' }}>Totales: </Text>
-            <Text style={{ marginLeft: 10, color: 'black' }}>
-              Lasso {sumBy(registers, reg => parseInt(reg.lasso))}
+            <Text style={{ color: 'white' }}>Totales: </Text>
+            <Text style={{ marginLeft: 10, color: 'white' }}>
+              {`Lasso ${sumBy(filteredRegisters, reg => parseInt(reg.lasso))} / Arauz: ${sumBy(filteredRegisters, reg => parseInt(reg.lelo))} / Blancos ${sumBy(filteredRegisters, reg => parseInt(reg.blancos))} / Nulos ${sumBy(filteredRegisters, reg => parseInt(reg.nulos))}`}
             </Text>
-            <Text style={{ marginLeft: 10, color: 'black' }}>
-              Lelo: {sumBy(registers, reg => parseInt(reg.lelo))}
-            </Text>
+            
           </Left>
-          <Body style={{ flex: 2, justifyContent: 'center' }}>
-          </Body>
+          {/* <Body style={{ flex: 2, justifyContent: 'center' }}>
+          </Body> */}
 
           {/* <Right style={{ flex: 1 }} /> */}
         </Footer>
