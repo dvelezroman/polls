@@ -81,7 +81,29 @@ const getRegisterFromStorage = (registers, reg) => {
     );
 }
 
+const removeRegisterFromStorage = (registers, reg) => {
+    return registers.filter((item) => !(
+        item.parroquia === reg.parroquia && 
+        item.junta === reg.junta &&
+        item.sexo === reg.sexo &&
+        item.mesa === reg.mesa
+    ));
+}
+
 const getRegisters = state => state.registerReducer;
+
+export function* workerRemoveFromStorage(values) {
+    try {
+        yield put(loading.working());
+        const registers = yield select(getRegisters);
+        const newRegistersArray = yield call (removeRegisterFromStorage, registers, values.payload);
+        yield call(_saveData, [ ...newRegistersArray ]);
+        yield put(storage.loadDataToReducer([ ...newRegistersArray ]));
+        yield put(loading.rest());
+    } catch (err) {
+        console.log(err);
+    }
+}
 
 export function* workerSaveToStorage(values) {
     try {

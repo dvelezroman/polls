@@ -195,7 +195,6 @@ class InputDataScreen extends Component {
                         visible={this.props.loading}
                         animation="fade"
                         cancelable={false}
-                        textContent={this.state.msg}
                         textStyle={{ color: 'blue' }}
                     />
                 )}

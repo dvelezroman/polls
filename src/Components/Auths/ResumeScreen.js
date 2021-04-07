@@ -34,7 +34,8 @@ const mapDispatchToProps = dispatch => ({
     fetchRegs: () => dispatch(storage.getFromStorage()),
     upload: () => dispatch(firebase.upload()),
     working: () => dispatch(loading.working()),
-    rest: () => dispatch(loading.rest())
+    rest: () => dispatch(loading.rest()),
+    removeRegister: (reg) => dispatch(storage.removeFromStorage(reg)),
 });
 
 class ResumeScreen extends Component {
@@ -45,11 +46,15 @@ class ResumeScreen extends Component {
         }
     }
 
+    removeItemHandler = register => {
+        this.props.removeRegister(register);
+    }
+
     getRegistersFromFirebase = () => {
         const ref = firebaseDataBase.ref('actas/Tosagua');
         ref.on('value', (snapshot) => {
             const registers = snapshot.val();
-            this.setState({ registers })
+            this.setState({ registers });
         });
     }
 
@@ -98,19 +103,18 @@ class ResumeScreen extends Component {
                 </Header>
                 <View style={{ flex: 1, backgroundColor: 'white' }}>
                     {!this.props.loading ? (
-                        <RegisterList regs={regs} />
+                        <RegisterList regs={regs} removeItem={this.removeItemHandler} />
                     ) : (
                         <Spinner
                             visible={this.props.loading}
                             animation="fade"
                             cancelable={false}
-                            textContent={'Subiendo...'}
                             textStyle={{ color: 'blue' }}
                         />
                     )
                     }
                 </View>
-                <Footer style={{ paddingTop: 20 }}>
+                <Footer style={{ paddingTop: 20, paddingBottom: 20 }}>
                     {/* <Left style={{ flex: 1 }}>
                         <Text style={{ color: 'white' }}>Totales</Text>
                         <Text style={{ color: 'white' }}>

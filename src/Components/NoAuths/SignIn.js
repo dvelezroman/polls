@@ -130,10 +130,10 @@ class SignIn extends Component {
                                     alignSelf: 'center',
                                     fontFamily: 'Roboto',
                                     fontStyle: 'italic',
-                                    color: 'blue'
+                                    color: 'white'
                                 }}
                             >
-                                Versión: 20210401
+                                Versión: 20210411
                             </Text>
                             <Text
                                 style={{
@@ -141,7 +141,7 @@ class SignIn extends Component {
                                     alignSelf: 'center',
                                     fontFamily: 'Roboto',
                                     fontStyle: 'italic',
-                                    color: 'blue'
+                                    color: 'white'
                                 }}
                             >
                                 CaffeinaSW, software factory.

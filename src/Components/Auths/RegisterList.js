@@ -1,15 +1,18 @@
-import React, { useCallback, useState } from 'react'
+import React from 'react'
 import { RefreshControl } from 'react-native'
 import {
   Body,
+  Icon,
   List,
   ListItem,
   Text,
   Title,
   Left,
+  Right,
+  Button,
 } from 'native-base';
 
-export default RegisterList = ({ regs, visible, from, onRefresh, refreshing }) => {
+export default RegisterList = ({ regs, visible, from, onRefresh, refreshing, removeItem }) => {
   const renderNoVisible = () =>
     <Title
       style={{ fontSize: 20, alignSelf: 'center' }}
@@ -39,15 +42,21 @@ export default RegisterList = ({ regs, visible, from, onRefresh, refreshing }) =
         </Text>
         <Text
           style={{ fontSize: 14 }}
-        >{`Guillermo Lasso: ${reg.lasso} / Lelo Arauz: ${reg.lelo}`}</Text>
+        >{`Guillermo Lasso: ${reg.lasso} / Andres Arauz: ${reg.lelo}`}</Text>
         <Text
           style={{ fontSize: 14 }}
         >{`Blancos: ${reg.blancos
           } -- Nulos: ${reg.nulos}`}</Text>
       </Body>
-      {/* <Right style={{ flex: 1 }}>
-        <Icon name="arrow-forward" />
-      </Right> */}
+      <Right style={{ flex: 1 }}>
+        <Button
+          onPress={() => removeItem(reg)}
+          rounded
+          style={{ flex: 1, backgroundColor: 'red' }}
+        >
+          <Icon name="trash-outline" />
+        </Button>
+      </Right>
     </ListItem>
 
   if (from === "AdminScreen") {

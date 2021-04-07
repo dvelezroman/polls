@@ -18,9 +18,15 @@ const loadDataToReducer = (values) => ({
     payload: values,
 })
 
+const removeFromStorage = (values) => ({
+    type: STORAGE.REMOVE_FROM_STORAGE,
+    payload: values,
+})
+
 export const storage = {
     saveToStorage,
     getFromStorage,
     clearStorage,
     loadDataToReducer,
+    removeFromStorage,
 };

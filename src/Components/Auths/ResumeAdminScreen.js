@@ -151,7 +151,6 @@ class ResumeAdminScreen extends Component {
               visible={this.props.loading}
               animation="fade"
               cancelable={false}
-              textContent={'Cargando...'}
               textStyle={{ color: 'blue' }}
             />
           )

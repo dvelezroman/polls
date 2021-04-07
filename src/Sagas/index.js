@@ -5,9 +5,13 @@ import { workerSignUp } from './signUp';
 import {
     workerSaveToStorage,
     workerGetFromStorage,
-    workerClearStorage
+    workerClearStorage,
+    workerRemoveFromStorage,
 } from './register';
-import { workerGetFromFirebase, workerUploadToFirebase } from './loadToFirebase';
+import {
+    workerGetFromFirebase,
+    workerUploadToFirebase,
+} from './loadToFirebase';
 
 export default function* watcher() {
     // listen and catch events
@@ -19,6 +23,7 @@ export default function* watcher() {
     yield takeEvery(STORAGE.CLEAR_STORAGE, workerClearStorage);
     yield takeEvery(FIREBASE.UPLOAD, workerUploadToFirebase);
     yield takeEvery(FIREBASE.GET_FROM_FIREBASE, workerGetFromFirebase);
+    yield takeEvery(STORAGE.REMOVE_FROM_STORAGE, workerRemoveFromStorage);
 }
 
 // TODO : una vez que se loggea , guardar localmente una sesion del usuario
