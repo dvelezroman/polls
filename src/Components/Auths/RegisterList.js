@@ -12,7 +12,7 @@ import {
   Button,
 } from 'native-base';
 
-export default RegisterList = ({ regs, visible, from, onRefresh, refreshing, removeItem }) => {
+export default RegisterList = ({ regs, visible, from, onRefresh, refreshing, removeItem, uploaded }) => {
   const renderNoVisible = () =>
     <Title
       style={{ fontSize: 20, alignSelf: 'center' }}
@@ -51,7 +51,7 @@ export default RegisterList = ({ regs, visible, from, onRefresh, refreshing, rem
         >{`Blancos: ${reg.blancos
           } -- Nulos: ${reg.nulos}`}</Text>
       </Body>
-      {!visible && <Right style={{ flex: 1 }}>
+      {uploaded && !visible && <Right style={{ flex: 1 }}>
         <Button
           onPress={() => removeItem(reg)}
           rounded

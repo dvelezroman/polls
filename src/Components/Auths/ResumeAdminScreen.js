@@ -59,7 +59,7 @@ class ResumeAdminScreen extends Component {
   }
 
   parseRegisters = (registers) => {
-    return Object.keys(registers).map(key => registers[key]);
+    return registers ? Object.keys(registers).map(key => registers[key]) : [];
   }
 
   getRegistersFromFirebase = () => {

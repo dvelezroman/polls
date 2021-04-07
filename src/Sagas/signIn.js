@@ -43,8 +43,8 @@ export function* workerSignIn(values) {
             yield put(error.clearError());
             const { uid } = response.data.user;
             const dataUser = yield call(getUser, uid);
-            yield call(_storeData, dataUser);
-            yield put(user.loadUser(dataUser));
+            yield call(_storeData, { ...dataUser, uid });
+            yield put(user.loadUser({ ...dataUser, uid }));
             // yield put(firebase.getFromFirebase());
         } else {
             Toast.show({

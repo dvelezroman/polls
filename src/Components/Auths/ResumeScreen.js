@@ -54,7 +54,9 @@ class ResumeScreen extends Component {
         const ref = firebaseDataBase.ref('actas/Tosagua');
         ref.on('value', (snapshot) => {
             const registers = snapshot.val();
-            this.setState({ registers });
+            if (registers) {
+                this.setState({ registers });
+            }
         });
     }
 
@@ -67,7 +69,7 @@ class ResumeScreen extends Component {
     }
 
     render = () => {
-        const { regs, user } = this.props;
+        const { regs, logged } = this.props;
         return (
             <Container style={{ backgroundColor: 'black' }}>
                 <Header
@@ -103,7 +105,7 @@ class ResumeScreen extends Component {
                 </Header>
                 <View style={{ flex: 1, backgroundColor: 'white' }}>
                     {!this.props.loading ? (
-                        <RegisterList regs={regs} removeItem={this.removeItemHandler} />
+                        <RegisterList regs={regs} removeItem={this.removeItemHandler} uploaded={logged.uploaded} />
                     ) : (
                         <Spinner
                             visible={this.props.loading}
@@ -125,7 +127,7 @@ class ResumeScreen extends Component {
                         </Text>
                     </Left> */}
                     <Body style={{ flex: 2, justifyContent: 'center' }}>
-                        {regs.length > 0 && <Button
+                        {(logged.admin || !logged.uploaded) && regs.length > 0 && <Button
                             style={{ alignSelf: 'center', backgroundColor: 'blue' }}
                             transparent
                             onPress={() => this.upload()}

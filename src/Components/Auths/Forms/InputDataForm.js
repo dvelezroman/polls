@@ -30,7 +30,7 @@ const pickerName = props => {
 
 const fieldName = props => {
     return (
-        <Item floatingLabel style={{ marginTop: 5 }}>
+        <Item floatingLabel style={{ marginTop: 0 }}>
             <Label>{props.placeholder}</Label>
             <Input
                 style={styles.textInput}
@@ -165,7 +165,7 @@ const InputDataForm = props => {
                 component={fieldName}
                 placeholder="Votos en Blanco"
             />
-            <Button
+            {(props.admin || !props.uploaded) && <Button
                 style={{
                     width: '100%',
                     justifyContent: 'center',
@@ -177,7 +177,7 @@ const InputDataForm = props => {
                 onPress={() => props.onSubmit()}
             >
                 <Text style={{ color: 'white' }}>Grabar</Text>
-            </Button>
+            </Button>}
         </KeyboardAvoidingView>
     );
 };

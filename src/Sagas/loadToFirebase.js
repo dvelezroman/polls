@@ -1,5 +1,5 @@
 import { call, select } from 'redux-saga/effects';
-import { firebaseDataBase } from '../Store/Services/Firebase';
+import { firebaseDataBase, firebaseStorage } from '../Store/Services/Firebase';
 import { Toast } from 'native-base';
 
 const _getRegistersFromFirebase = async () => {
@@ -28,11 +28,52 @@ const _getRegistersFromFirebase = async () => {
     }
 }
 
+const uriToBlob = (uri) => {
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.onload = function() {
+        // return the blob
+        resolve(xhr.response);
+      };
+      
+      xhr.onerror = function() {
+        // something went wrong
+        reject(new Error('uriToBlob failed'));
+      };
+      // this helps us get a blob
+      xhr.responseType = 'blob';
+      xhr.open('GET', uri, true);
+      
+      xhr.send(null);
+    });
+  }
+
 const _upload = async (registers) => {
     try {
         const regProms = registers.map(reg => {
             const recinto = reg.recinto.split(' ').join('_');
-            return firebaseDataBase.ref(`actas/Tosagua/${reg.parroquia}@${recinto}@${reg.mesa}@${reg.sexo}`).set(reg);
+            reg.imageURL = `actas/Tosagua/${reg.parroquia}/${recinto}@${reg.mesa}@${reg.sexo}`;
+            delete reg.file;
+            return uriToBlob(reg.uploadUri)
+                .then(blob => {
+                    return firebaseStorage.ref(reg.imageURL).put(blob, {
+                        contentType: 'image/jpeg'
+                    })
+                })
+                .then(snapshot => {
+                    console.log("Image uploaded...");
+                    return firebaseDataBase.ref(`actas/Tosagua/${reg.parroquia}@${recinto}@${reg.mesa}@${reg.sexo}`).set(reg)
+                })
+                .then(snapshot => {
+                    console.log("Register saved");
+                    const { nombre, email, admin, uid } = reg.responsable;
+                    return firebaseDataBase.ref(`users/${uid}`).set({ username: nombre, email, admin, uploaded: true });
+                });
+            
+            // return firebaseStorage.ref(reg.imageURL).put(blobFile).then(() => {
+            //     console.log("Image uploaded...");
+            //     return firebaseDataBase.ref(`actas/Tosagua/${reg.parroquia}@${recinto}@${reg.mesa}@${reg.sexo}`).set(reg);
+            // });
         })
         await Promise.all(regProms);
 
@@ -47,6 +88,7 @@ const _upload = async (registers) => {
             msg: 'Se subieron los registros...'
         };
     } catch (err) {
+        console.log(err)
         Toast.show({
             text: 'No se subieron los registros',
             textStyle: { height: 50 },

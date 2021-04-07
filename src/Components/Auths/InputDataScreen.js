@@ -2,6 +2,9 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import filter from 'lodash/filter';
 import Spinner from 'react-native-loading-spinner-overlay';
+import * as Permissions from 'expo-permissions';
+import * as ImagePicker from 'expo-image-picker';
+import * as ImageManipulator from 'expo-image-manipulator';
 import {
     Container,
     Badge,
@@ -23,6 +26,8 @@ import { storage, loading } from '../../ActionCreators';
 import InputDataForm from './Forms/InputDataForm';
 
 import { tosagua } from './Mock';
+import { Alert, Image, Platform } from 'react-native';
+
 const data = tosagua;
 
 const mapStateToProps = state => ({
@@ -50,6 +55,9 @@ class InputDataScreen extends Component {
             recintos: [],
             msg: 'Cargando...',
             sexo: "Mujeres",
+            cameraPermission: false,
+            foto: null,
+            uploaded: false,
         };
     }
 
@@ -90,13 +98,15 @@ class InputDataScreen extends Component {
             parroquia,
             recinto,
             sexo,
+            foto
         } = this.state
         if (
             !votos.mesa ||
             !votos.lasso ||
             !votos.lelo ||
             !votos.blancos ||
-            !votos.nulos
+            !votos.nulos ||
+            foto === null
         ) {
             Toast.show({
                 text: 'Debe completar los datos!',
@@ -104,6 +114,7 @@ class InputDataScreen extends Component {
                 duration: 2000
             });
         } else {
+            const uploadUri = Platform.OS === 'ios' ? foto.uri.replace('file://', '') : foto.uri;
             const register = {
                 provincia,
                 canton,
@@ -114,14 +125,79 @@ class InputDataScreen extends Component {
                 responsable: {
                     nombre: this.props.logged.username,
                     email: this.props.logged.email,
-                }
+                    admin: this.props.logged.admin,
+                    uid: this.props.logged.uid,
+                },
+                uploadUri: foto ? uploadUri : null,
             };
+            this.setState({ uploaded: true })
             this.props.saveRegs(register);
+        }
+    };
+
+    requestCameraPermissions = async () => {
+        const cameraRoll = await Permissions.getAsync(Permissions.CAMERA_ROLL);
+        const camera = await Permissions.getAsync(Permissions.CAMERA);
+        if (cameraRoll.status === 'granted' && camera.status === 'granted') {
+            this.setState({ cameraPermission: true });
+        } else {
+            const cameraRollPermission = await Permissions.askAsync(
+                Permissions.MEDIA_LIBRARY
+            );
+            const cameraPermission = await Permissions.askAsync(Permissions.CAMERA);
+            this.setState({
+                cameraPermission:
+                    cameraPermission.status === 'granted' &&
+                    cameraRollPermission === 'granted'
+            });
+        }
+    }
+
+    pickImage = async () => {
+        Alert.alert('Camara o Galería', 'Seleccione origen', [
+            { text: 'Cámara', onPress: this.camera },
+            { text: 'Galería', onPress: this.galeria }
+        ]);
+    };
+
+    camera = async () => {
+        if (this.state.cameraPermission) {
+            const result = await ImagePicker.launchCameraAsync({
+                allowsEditing: false,
+                quality: 0.5,
+                base64: true
+            });
+            if (!result.cancelled) {
+                const image = await ImageManipulator.manipulateAsync(
+                    result.uri,
+                    [{ resize: { width: 1000, height: 1000 } }],
+                    { compress: 0.5 }
+                );
+                this.setState({ foto: image });
+            }
+        }
+    };
+
+    galeria = async () => {
+        const result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: 'Images',
+            quality: 0.5,
+            base64: true
+        });
+        if (!result.cancelled) {
+            const image = await ImageManipulator.manipulateAsync(
+                result.uri,
+                [{ resize: { width: 1000, height: 1000 } }],
+                { compress: 0.5 }
+            );
+            // console.log(image);
+            this.setState({ foto: image });
         }
     };
 
     componentDidMount = () => {
         // this.props.clearRegs();
+        this.requestCameraPermissions();
         const recintos = this.filterRecintos(data.parroquia);
         this.props.fetchRegsFromLocal();
         this.setState({
@@ -129,10 +205,32 @@ class InputDataScreen extends Component {
             canton: data.canton,
             parroquia: data.parroquias[0].value,
             recinto: recintos.length ? recintos[0].value : "Unico Recinto",
+            uploaded: this.props.logged.uploaded,
         });
     };
 
+    renderImageOrCameraIcon = () => {
+        const { foto } = this.state;
+        return foto ? (
+            <Image
+                source={{ uri: foto.uri }}
+                fadeDuration={0}
+                style={{ marginVertical: 20, alignSelf: 'center', width: 100, height: 100 }}
+            />
+        ) :
+            <Button
+                onPress={this.pickImage}
+                rounded
+                style={{ marginVertical: 20, alignSelf: 'center', backgroundColor: 'blue' }}
+            >
+                <Icon name="camera-outline" style={{ fontSize: 18, color: 'white' }} />
+            </Button>
+    }
+
     render = () => {
+        const accessToCamera = this.state.cameraPermission;
+        console.log(this.props.logged)
+        
         return (
             <Container style={{ backgroundColor: 'white' }}>
                 <Header
@@ -177,6 +275,18 @@ class InputDataScreen extends Component {
                 {!this.props.loading ? (
                     <Content
                     >
+                        <Text
+                            style={{
+                                fontSize: 14,
+                                marginTop: 10,
+                                alignSelf: 'center',
+                                color: '#c0c0c0'
+                            }}
+                        >
+                            {accessToCamera ? 'Tomar foto del acta' : 'No tienes acceso a la cámara.'}
+                        </Text>
+                        {accessToCamera && this.renderImageOrCameraIcon()}
+
                         <Form style={{ paddingHorizontal: 10 }}>
                             <InputDataForm
                                 parroquia={this.state.parroquia}
@@ -187,6 +297,8 @@ class InputDataScreen extends Component {
                                 sexos={data.sexos}
                                 sexo={this.state.sexo}
                                 onSubmit={this.registerDataHandler}
+                                uploaded={this.state.uploaded}
+                                admin={this.props.logged.admin}
                             />
                         </Form>
                     </Content>

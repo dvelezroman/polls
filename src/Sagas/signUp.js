@@ -32,6 +32,7 @@ export function* workerSignUp(values) {
                 email,
                 uid,
                 admin: false,
+                uploaded: false,
             }); // stores the data of new user in firebase database
             yield put(user.successRegister())
             yield put(error.clearError());
