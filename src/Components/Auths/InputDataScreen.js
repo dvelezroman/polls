@@ -57,7 +57,6 @@ class InputDataScreen extends Component {
             sexo: "Mujeres",
             cameraPermission: false,
             foto: null,
-            uploaded: false,
         };
     }
 
@@ -130,7 +129,6 @@ class InputDataScreen extends Component {
                 },
                 uploadUri: foto ? uploadUri : null,
             };
-            this.setState({ uploaded: true })
             this.props.saveRegs(register);
         }
     };
@@ -229,7 +227,6 @@ class InputDataScreen extends Component {
 
     render = () => {
         const accessToCamera = this.state.cameraPermission;
-        console.log(this.props.logged)
         
         return (
             <Container style={{ backgroundColor: 'white' }}>
@@ -297,7 +294,7 @@ class InputDataScreen extends Component {
                                 sexos={data.sexos}
                                 sexo={this.state.sexo}
                                 onSubmit={this.registerDataHandler}
-                                uploaded={this.state.uploaded}
+                                uploaded={this.props.logged.uploaded}
                                 admin={this.props.logged.admin}
                             />
                         </Form>

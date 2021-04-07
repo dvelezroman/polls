@@ -62,6 +62,7 @@ class ResumeScreen extends Component {
 
     async upload() {
         await this.props.upload();
+        this.setState({ uploaded: true })
     }
 
     componentDidMount() {

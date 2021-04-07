@@ -24,7 +24,7 @@ const getUser = uid =>
         .once('value')
         .then(snapshot => snapshot.val());
 
-const _storeData = async dataUser => {
+export const _storeData = async dataUser => {
     try {
         await AsyncStorage.setItem(
             'userLogged@polls',

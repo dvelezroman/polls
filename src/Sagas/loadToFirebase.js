@@ -1,6 +1,8 @@
-import { call, select } from 'redux-saga/effects';
+import { call, select, put } from 'redux-saga/effects';
 import { firebaseDataBase, firebaseStorage } from '../Store/Services/Firebase';
 import { Toast } from 'native-base';
+import { _storeData } from './signIn';
+import { user } from '../ActionCreators';
 
 const _getRegistersFromFirebase = async () => {
     try {
@@ -49,6 +51,7 @@ const uriToBlob = (uri) => {
   }
 
 const _upload = async (registers) => {
+    let userUpdated = null;
     try {
         const regProms = registers.map(reg => {
             const recinto = reg.recinto.split(' ').join('_');
@@ -67,6 +70,10 @@ const _upload = async (registers) => {
                 .then(snapshot => {
                     console.log("Register saved");
                     const { nombre, email, admin, uid } = reg.responsable;
+                    if (userUpdated) {
+                        userUpdated = { username: nombre, email, admin, uploaded: true, uid };
+                    }
+                    _storeData({ username: nombre, email, admin, uploaded: true, uid })
                     return firebaseDataBase.ref(`users/${uid}`).set({ username: nombre, email, admin, uploaded: true });
                 });
             
@@ -76,7 +83,7 @@ const _upload = async (registers) => {
             // });
         })
         await Promise.all(regProms);
-
+       
         Toast.show({
             text: 'Se subieron los registros...',
             textStyle: { height: 50 },
@@ -85,7 +92,8 @@ const _upload = async (registers) => {
         });
         return {
             error: false,
-            msg: 'Se subieron los registros...'
+            msg: 'Se subieron los registros...',
+            userUpdated,
         };
     } catch (err) {
         console.log(err)
@@ -109,6 +117,7 @@ export function* workerUploadToFirebase() {
         const registers = yield select(getRegisters);
         const response = yield call(_upload, registers);
         if (!response.error) {
+            yield put(user.updateUserUloadedStatus(true));
             //yield put(register._clearStorage());
         }
     } catch (err) {

@@ -31,6 +31,10 @@ const cleanSuccessRegister = () => ({
     type: USER.CLEAN_SUCCESS_REGISTER
 })
 
+const updateUserUloadedStatus = () => ({
+    type: USER.UPDATE_USER_UPLOADED_STATUS
+})
+
 export const user = {
     signIn,
     signOut,
@@ -39,4 +43,5 @@ export const user = {
     unloadUser,
     successRegister,
     cleanSuccessRegister,
+    updateUserUloadedStatus,
 };

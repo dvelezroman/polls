@@ -51,7 +51,7 @@ export default RegisterList = ({ regs, visible, from, onRefresh, refreshing, rem
         >{`Blancos: ${reg.blancos
           } -- Nulos: ${reg.nulos}`}</Text>
       </Body>
-      {uploaded && !visible && <Right style={{ flex: 1 }}>
+      {(!uploaded && !visible) && <Right style={{ flex: 1 }}>
         <Button
           onPress={() => removeItem(reg)}
           rounded
