@@ -52,22 +52,29 @@ const uriToBlob = (uri) => {
 
 const _upload = async (registers) => {
     let userUpdated = null;
+    let imageURL = null;
     try {
         const regProms = registers.map(reg => {
             const recinto = reg.recinto.split(' ').join('_');
-            reg.imageURL = `actas/Tosagua/${reg.parroquia}/${recinto}@${reg.mesa}@${reg.sexo}`;
+            const imagePath = `actas/Tosagua/${reg.parroquia}/${recinto}@${reg.mesa}@${reg.sexo}`;
             delete reg.file;
             return uriToBlob(reg.uploadUri)
                 .then(blob => {
-                    return firebaseStorage.ref(reg.imageURL).put(blob, {
+                    return firebaseStorage.ref(imagePath).put(blob, {
                         contentType: 'image/jpeg'
                     })
                 })
                 .then(snapshot => {
                     console.log("Image uploaded...");
+                    return firebaseStorage.ref(snapshot.ref.fullPath).getDownloadURL()
+                })
+                .then(url => {
+                    console.log('Image Url received: ', url)
+                    reg.imageURL = url
+                    delete reg.uploadUri
                     return firebaseDataBase.ref(`actas/Tosagua/${reg.parroquia}@${recinto}@${reg.mesa}@${reg.sexo}`).set(reg)
                 })
-                .then(snapshot => {
+                .then(() => {
                     console.log("Register saved");
                     const { nombre, email, admin, uid } = reg.responsable;
                     if (userUpdated) {
