@@ -79,6 +79,8 @@ class InputDataScreen extends Component {
         if (item.name === 'parroquia') {
             recintos = this.filterRecintos(item.value);
             recinto = recintos[0].value;
+        } if (item.name === 'recinto') {
+            recinto = item.value
         }
         this.setState({ [item.name]: item.value, recintos, recinto });
     };
@@ -189,7 +191,7 @@ class InputDataScreen extends Component {
                 [{ resize: { width: 1000, height: 1000 } }],
                 { compress: 0.5 }
             );
-            // console.log(image);
+            
             this.setState({ foto: image });
         }
     };
@@ -230,7 +232,6 @@ class InputDataScreen extends Component {
 
     render = () => {
         const accessToCamera = this.state.cameraPermission;
-        
         return (
             <Container style={{ backgroundColor: 'white' }}>
                 <Header
