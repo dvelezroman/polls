@@ -165,7 +165,7 @@ const InputDataForm = props => {
                 component={fieldName}
                 placeholder="Votos en Blanco"
             />
-            {(props.admin || !props.uploaded) && <Button
+            {<Button
                 style={{
                     width: '100%',
                     justifyContent: 'center',

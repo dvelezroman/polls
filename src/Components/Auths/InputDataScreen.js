@@ -26,7 +26,7 @@ import { storage, loading } from '../../ActionCreators';
 import InputDataForm from './Forms/InputDataForm';
 
 import { tosagua } from './Mock';
-import { Alert, Image, Platform } from 'react-native';
+import { Alert, Image, Platform, TouchableOpacity } from 'react-native';
 
 const data = tosagua;
 
@@ -129,6 +129,7 @@ class InputDataScreen extends Component {
                 },
                 uploadUri: foto ? uploadUri : null,
             };
+            this.setState({ foto: null })
             this.props.saveRegs(register);
         }
     };
@@ -210,11 +211,13 @@ class InputDataScreen extends Component {
     renderImageOrCameraIcon = () => {
         const { foto } = this.state;
         return foto ? (
-            <Image
-                source={{ uri: foto.uri }}
-                fadeDuration={0}
-                style={{ marginVertical: 20, alignSelf: 'center', width: 100, height: 100 }}
-            />
+            <TouchableOpacity onPress={this.pickImage}>
+                <Image
+                    source={{ uri: foto.uri }}
+                    fadeDuration={0}
+                    style={{ marginVertical: 20, alignSelf: 'center', width: 100, height: 100 }}
+                />
+            </TouchableOpacity>
         ) :
             <Button
                 onPress={this.pickImage}

@@ -24,6 +24,7 @@ import RegisterList from './RegisterList';
 import { firebaseDataBase } from '../../Store/Services/Firebase';
 
 import { tosagua } from './Mock';
+import ModalComponent from './ModalComponent';
 const data = tosagua;
 
 const mapStateToProps = state => ({
@@ -41,7 +42,13 @@ class ResumeAdminScreen extends Component {
       refreshing: false,
       parroquia: 'Todas',
       junta: 'Juntas',
+      modalVisible: false,
+      selectedReg: null,
     }
+  }
+
+  onToggleModal = (selectedReg = null) => {
+    this.setState(state => ({ selectedReg, modalVisible: !state.modalVisible }))
   }
 
   onRefresh = () => {
@@ -76,10 +83,17 @@ class ResumeAdminScreen extends Component {
 
   render = () => {
     const { user } = this.props;
-    const { registers, refreshing, filteredRegisters } = this.state;
+    const { refreshing, filteredRegisters, modalVisible, selectedReg } = this.state;
 
     return (
       <Container style={{ backgroundColor: 'white' }}>
+        {selectedReg && 
+          <ModalComponent
+            modalVisible={modalVisible}
+            register={selectedReg}
+            onToggleModal={this.onToggleModal}
+          />
+        }
         <Header
           style={{
             marginTop: 25
@@ -145,6 +159,7 @@ class ResumeAdminScreen extends Component {
               from="AdminScreen"
               onRefresh={this.onRefresh}
               refreshing={refreshing}
+              onToggleModal={this.onToggleModal}
             />
           ) : (
             <Spinner

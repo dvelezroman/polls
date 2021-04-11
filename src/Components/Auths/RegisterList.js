@@ -1,5 +1,5 @@
 import React from 'react'
-import { RefreshControl } from 'react-native'
+import { RefreshControl, TouchableOpacity } from 'react-native'
 import {
   Body,
   Icon,
@@ -12,7 +12,16 @@ import {
   Button,
 } from 'native-base';
 
-export default RegisterList = ({ regs, visible, from, onRefresh, refreshing, removeItem, uploaded }) => {
+export default RegisterList = ({
+  regs,
+  visible,
+  from,
+  onRefresh,
+  refreshing,
+  removeItem,
+  uploaded,
+  onToggleModal
+}) => {
   const renderNoVisible = () =>
     <Title
       style={{ fontSize: 20, alignSelf: 'center' }}
@@ -20,20 +29,24 @@ export default RegisterList = ({ regs, visible, from, onRefresh, refreshing, rem
       Su perfil de usuario no permite visualizar esta información.
       </Title>
 
-  const renderItems = (reg, index) =>
+  const renderItems = reg =>
     <ListItem>
-      <Left
-        style={{
-          flexDirection: 'column',
-          backgroundColor: reg.sexo === 'Mujeres' ? 'pink' : 'gray',
-          borderRadius: 10,
-          padding: 5,
-        }}
-      >
-        <Text
-          style={{ fontSize: 20 }}
-        >{`${reg.mesa} - ${reg.sexo[0]}`}</Text>
-      </Left>
+      <TouchableOpacity style={{ flex: 1 }} onPress={() => onToggleModal(reg)}>
+        <Left
+          style={{
+            flexDirection: 'column',
+            backgroundColor: reg.sexo === 'Mujeres' ? 'pink' : 'gray',
+            borderRadius: 10,
+            padding: 5,
+          }}
+        >
+
+          <Text
+            style={{ fontSize: 20 }}
+          >{`${reg.mesa} - ${reg.sexo[0]}`}</Text>
+
+        </Left>
+      </TouchableOpacity>
       <Body style={{ flex: 5 }}>
         <Text
           style={{
@@ -51,7 +64,7 @@ export default RegisterList = ({ regs, visible, from, onRefresh, refreshing, rem
         >{`Blancos: ${reg.blancos
           } -- Nulos: ${reg.nulos}`}</Text>
       </Body>
-      {(!uploaded && !visible) && <Right style={{ flex: 1 }}>
+      {!visible && <Right style={{ flex: 1 }}>
         <Button
           onPress={() => removeItem(reg)}
           rounded

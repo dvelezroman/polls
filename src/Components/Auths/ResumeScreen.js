@@ -128,7 +128,7 @@ class ResumeScreen extends Component {
                         </Text>
                     </Left> */}
                     <Body style={{ flex: 2, justifyContent: 'center' }}>
-                        {(logged.admin || !logged.uploaded) && regs.length > 0 && <Button
+                        {regs.length > 0 && <Button
                             style={{ alignSelf: 'center', backgroundColor: 'blue' }}
                             transparent
                             onPress={() => this.upload()}

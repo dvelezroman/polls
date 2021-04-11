@@ -1,8 +1,9 @@
 import { call, select, put } from 'redux-saga/effects';
+import { v4 as uuidv4 } from 'uuid'
 import { firebaseDataBase, firebaseStorage } from '../Store/Services/Firebase';
 import { Toast } from 'native-base';
 import { _storeData } from './signIn';
-import { user } from '../ActionCreators';
+import { user, register, loading } from '../ActionCreators';
 
 const _getRegistersFromFirebase = async () => {
     try {
@@ -52,11 +53,11 @@ const uriToBlob = (uri) => {
 
 const _upload = async (registers) => {
     let userUpdated = null;
-    let imageURL = null;
     try {
         const regProms = registers.map(reg => {
             const recinto = reg.recinto.split(' ').join('_');
-            const imagePath = `actas/Tosagua/${reg.parroquia}/${recinto}@${reg.mesa}@${reg.sexo}`;
+            const keyRef = uuidv4()
+            const imagePath = `actas/Tosagua/${reg.parroquia}/${recinto}/${reg.mesa}/${reg.sexo}/${keyRef}`;
             delete reg.file;
             return uriToBlob(reg.uploadUri)
                 .then(blob => {
@@ -65,17 +66,14 @@ const _upload = async (registers) => {
                     })
                 })
                 .then(snapshot => {
-                    console.log("Image uploaded...");
                     return firebaseStorage.ref(snapshot.ref.fullPath).getDownloadURL()
                 })
                 .then(url => {
-                    console.log('Image Url received: ', url)
                     reg.imageURL = url
                     delete reg.uploadUri
                     return firebaseDataBase.ref(`actas/Tosagua/${reg.parroquia}@${recinto}@${reg.mesa}@${reg.sexo}`).set(reg)
                 })
                 .then(() => {
-                    console.log("Register saved");
                     const { nombre, email, admin, uid } = reg.responsable;
                     if (userUpdated) {
                         userUpdated = { username: nombre, email, admin, uploaded: true, uid };
@@ -90,7 +88,7 @@ const _upload = async (registers) => {
             // });
         })
         await Promise.all(regProms);
-       
+        // borra todos los registros
         Toast.show({
             text: 'Se subieron los registros...',
             textStyle: { height: 50 },
@@ -121,14 +119,17 @@ const getRegisters = state => state.registerReducer;
 
 export function* workerUploadToFirebase() {
     try {
+        yield put(loading.working());
         const registers = yield select(getRegisters);
         const response = yield call(_upload, registers);
         if (!response.error) {
             yield put(user.updateUserUloadedStatus(true));
-            //yield put(register._clearStorage());
+            yield put(register.deleteDataFromStorage());
         }
+        yield put(loading.rest());
     } catch (err) {
         console.log(err);
+        yield put(loading.rest());
     }
 }
 
